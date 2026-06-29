@@ -58,8 +58,8 @@ def detect_challenge(driver) -> bool:
 
 
 def build_driver(headless: bool = False):
-    PROFILE_DIR.mkdir(exist_ok=True)
-    SHOTS_DIR.mkdir(exist_ok=True)
+    PROFILE_DIR.mkdir(parents=True, exist_ok=True)
+    SHOTS_DIR.mkdir(parents=True, exist_ok=True)
 
     opts = webdriver.ChromeOptions() if _USE_SYSTEM_CHROME else uc.ChromeOptions()
     opts.add_argument(f"--user-data-dir={PROFILE_DIR}")
