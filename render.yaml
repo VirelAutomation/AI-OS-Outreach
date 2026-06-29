@@ -1,8 +1,8 @@
-# AI OS Backend — Render Blueprint
-# Repo: https://github.com/VirelAutomation/AI-OS-Backend
+# AI OS Outreach — Render Blueprint
+# Repo: https://github.com/VirelAutomation/AI-OS-Outreach
 #
 # Deploy: Render Dashboard → New → Blueprint → connect this repo → Apply
-# Or: push render.yaml to main and import the Blueprint from GitHub.
+# Or: push render.yaml to clean-main and import the Blueprint from GitHub.
 
 services:
   - type: web
@@ -14,7 +14,7 @@ services:
     region: oregon
     healthCheckPath: /health/
     autoDeployTrigger: commit
-    branch: main
+    branch: clean-main
 
     # Persistent disk for outreach DBs, IG/FB sessions, runtime state
     disk:
