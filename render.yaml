@@ -33,6 +33,14 @@ services:
         value: "1"
       - key: PYTHONUNBUFFERED
         value: "1"
+      - key: RUN_API
+        value: "1"
+      - key: RUN_SOCIAL_SCHEDULER
+        value: "0"
+      - key: RUN_EMAIL_SCHEDULER
+        value: "0"
+      - key: RUN_JARVIS_SUPERVISOR
+        value: "0"
 
       # ── Set these in Render Dashboard (Environment → Secret Files / env vars) ──
       - key: API_SECRET_KEY

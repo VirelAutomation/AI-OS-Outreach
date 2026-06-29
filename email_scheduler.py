@@ -106,7 +106,7 @@ async def run_morning_campaign(draft_only: bool = True):
     if not _gmail_configured():
         log.warning("[MORNING] Gmail not configured — showing sample drafts only")
         _print_morning_samples()
-        return
+        return {"ok": True, "campaign": "morning", "draft_only": draft_only, "gmail_configured": False, "drafted": 0}
 
     total_sent = 0
     for target in MORNING_TARGETS:
@@ -138,6 +138,7 @@ async def run_morning_campaign(draft_only: bool = True):
             total_sent += 1
 
     log.info(f"[MORNING] Done — {total_sent} emails drafted")
+    return {"ok": True, "campaign": "morning", "draft_only": draft_only, "gmail_configured": True, "drafted": total_sent}
 
 
 async def run_evening_campaign(draft_only: bool = True):
@@ -148,7 +149,7 @@ async def run_evening_campaign(draft_only: bool = True):
     if not _gmail_configured():
         log.warning("[EVENING] Gmail not configured — showing sample drafts only")
         _print_evening_samples()
-        return
+        return {"ok": True, "campaign": "evening", "draft_only": draft_only, "gmail_configured": False, "drafted": 0}
 
     total_sent = 0
     for target in EVENING_TARGETS:
@@ -179,6 +180,7 @@ async def run_evening_campaign(draft_only: bool = True):
             total_sent += 1
 
     log.info(f"[EVENING] Done — {total_sent} emails drafted")
+    return {"ok": True, "campaign": "evening", "draft_only": draft_only, "gmail_configured": True, "drafted": total_sent}
 
 
 def _print_morning_samples():

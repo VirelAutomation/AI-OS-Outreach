@@ -2,9 +2,9 @@ name: Backend CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, clean-main]
   pull_request:
-    branches: [main]
+    branches: [main, clean-main]
   workflow_dispatch:
 
 jobs:
@@ -39,6 +39,7 @@ jobs:
 
       - name: Smoke import FastAPI app
         env:
+          PYTHONPATH: ${{ github.workspace }}
           SUPABASE_URL: https://example.supabase.co
           SUPABASE_ANON_KEY: ci-anon-key
           SUPABASE_SERVICE_KEY: ci-service-key

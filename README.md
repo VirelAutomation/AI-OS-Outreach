@@ -11,14 +11,14 @@ It ships:
 
 ## GitHub-first deploy flow
 
-1. Push to `main`.
+1. Push to `clean-main`.
 2. GitHub Actions runs `Backend CI`.
 3. Deploy from GitHub using **Render** (recommended) or **Railway**:
    - **Render:** [DEPLOY_BACKEND_RENDER.md](DEPLOY_BACKEND_RENDER.md) + `render.yaml` Blueprint
    - **Railway:** connect repo, enable `Wait for CI`, use [DEPLOY_BACKEND_RAILWAY.md](DEPLOY_BACKEND_RAILWAY.md)
 4. Set environment variables from `.env.render.example` (Render) or `.env.railway.example` (Railway).
 
-This keeps deploy control in the repository and runs outreach schedulers on an always-on host (no local PC required).
+GitHub Actions now owns the live outreach schedule. Render stays API-first by default and uses role flags from `.env.render.example` so it does not duplicate the social workers.
 
 ## Required Render / Railway configuration
 

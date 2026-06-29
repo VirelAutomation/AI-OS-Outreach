@@ -1,18 +1,20 @@
 # GitHub Cron Autonomy
 
-This is the free-tier fallback when you do not have a true always-on host.
+This is the GitHub-driven outreach runtime when you do not want a 24/7 social worker host.
 
 ## What it does
 
-GitHub Actions runs [social-cron.yml](C:/Users/Marilyn/Downloads/AI OS/.github/workflows/social-cron.yml) every hour.
+GitHub Actions runs [social-cron.yml](C:/Users/Marilyn/Downloads/AI OS/.github/workflows/social-cron.yml) every 30 minutes.
 Each run:
 
 - restores runtime state from the previous run
-- executes the current or recently missed outreach slot in IST
-- runs Instagram reply checks
-- runs scheduled follow-ups at 11:00 and 22:00 IST
+- executes the current or recently missed outreach slots in IST
+- runs Instagram reply checks on the `:30` cadence
+- runs scheduled follow-ups at `11:00` and `22:30` IST
+- runs Gmail morning/evening draft campaigns when due
 - rebuilds CRL reply-learning artifacts from the latest IG/FB outcome logs
 - optionally runs the optimizer dry-run if reply count is still zero
+- mirrors social runtime activity and tick summaries into Supabase when the outreach tables exist
 - saves runtime state back into the workflow cache and uploads reports as artifacts
 
 The tick logic lives in [cloud_autonomy_tick.py](C:/Users/Marilyn/Downloads/AI OS/cloud_autonomy_tick.py).
@@ -21,14 +23,14 @@ The tick logic lives in [cloud_autonomy_tick.py](C:/Users/Marilyn/Downloads/AI O
 
 - no local PC required
 - no credit card required
-- GitHub-only backend scheduling
-- recovery if one scheduled run fails and the next run needs to catch up
+- GitHub-owned outreach scheduling
+- catch-up behavior if one scheduled run fails and the next run needs to recover
 
 ## What this is not
 
 - not a true always-on daemon
-- not ideal for long-lived browser sessions
-- not a guaranteed replacement for a persistent backend host
+- not ideal for fragile long-lived browser sessions
+- not a guaranteed replacement for a persistent social browser host
 
 ## Required GitHub secrets
 
@@ -42,13 +44,18 @@ INSTAGRAM_SESSION=
 FACEBOOK_EMAIL=
 FACEBOOK_PASSWORD=
 FACEBOOK_SESSION=
+GMAIL_CLIENT_ID=
+GMAIL_CLIENT_SECRET=
+GMAIL_REFRESH_TOKEN=
+GMAIL_SENDER_EMAIL=
 GEMINI_API_KEY=
 GEMINI_API_KEY_JARVIS=
 SUPABASE_URL=
 SUPABASE_SERVICE_KEY=
 ```
 
-`INSTAGRAM_SESSION_ID` / `INSTAGRAM_SESSION` and `FACEBOOK_SESSION` are the most important.
+`INSTAGRAM_SESSION_ID` / `INSTAGRAM_SESSION` and `FACEBOOK_SESSION` are the authoritative auth source.
+The workflow also caches safe text session artifacts under `.runtime/github-social/ig_outreach/` and `.runtime/github-social/fb_outreach/`, but secrets remain the source of truth.
 
 ## Frontend
 
