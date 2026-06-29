@@ -1,0 +1,114 @@
+name: Social Cron Runtime
+
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: social-cron-runtime
+  cancel-in-progress: false
+
+jobs:
+  social-tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      PYTHONUNBUFFERED: "1"
+      DATA_DIR: ${{ github.workspace }}/.runtime/github-social
+      IG_HEADLESS: "1"
+      INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
+      INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
+      INSTAGRAM_SESSION_ID: ${{ secrets.INSTAGRAM_SESSION_ID }}
+      INSTAGRAM_SESSION: ${{ secrets.INSTAGRAM_SESSION }}
+      FACEBOOK_EMAIL: ${{ secrets.FACEBOOK_EMAIL }}
+      FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
+      FACEBOOK_SESSION: ${{ secrets.FACEBOOK_SESSION }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_API_KEY_JARVIS: ${{ secrets.GEMINI_API_KEY_JARVIS }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Export Chrome paths
+        run: |
+          echo "CHROME_BIN=$(which google-chrome || which google-chrome-stable || which chromium || which chromium-browser)" >> "$GITHUB_ENV"
+          if command -v chromedriver >/dev/null 2>&1; then
+            echo "CHROMEDRIVER_PATH=$(which chromedriver)" >> "$GITHUB_ENV"
+          fi
+
+      - name: Restore runtime cache
+        id: runtime-cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .runtime/github-social/github_social_state.json
+            .runtime/github-social/github_social_last_report.json
+            .runtime/github-social/github_social_optimizer.json
+            .runtime/github-social/outreach.db
+            .runtime/github-social/fb_outreach.db
+            .runtime/github-social/intelligence_engine/reply_crl_*
+          key: social-runtime-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            social-runtime-${{ github.ref_name }}-
+
+      - name: Prepare runtime directories
+        run: |
+          mkdir -p "$DATA_DIR"
+          mkdir -p "$DATA_DIR/ig_outreach"
+          mkdir -p "$DATA_DIR/fb_outreach"
+          mkdir -p "$DATA_DIR/intelligence_engine"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Compile critical Python modules
+        run: |
+          python -m compileall \
+            intelligence_engine \
+            ig_outreach \
+            fb_outreach \
+            cloud_autonomy_tick.py \
+            -q
+
+      - name: Run autonomous cron tick
+        run: python cloud_autonomy_tick.py
+
+      - name: Save runtime cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .runtime/github-social/github_social_state.json
+            .runtime/github-social/github_social_last_report.json
+            .runtime/github-social/github_social_optimizer.json
+            .runtime/github-social/outreach.db
+            .runtime/github-social/fb_outreach.db
+            .runtime/github-social/intelligence_engine/reply_crl_*
+          key: social-runtime-${{ github.ref_name }}-${{ github.run_id }}
+
+      - name: Upload CRL and runtime reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: social-runtime-reports
+          path: |
+            .runtime/github-social/github_social_last_report.json
+            .runtime/github-social/github_social_state.json
+            .runtime/github-social/github_social_optimizer.json
+            .runtime/github-social/intelligence_engine/reply_crl_*
+          if-no-files-found: ignore

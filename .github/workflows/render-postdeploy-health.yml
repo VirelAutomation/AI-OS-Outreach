@@ -1,0 +1,26 @@
+name: Render Post-Deploy Health
+
+on:
+  workflow_dispatch:
+    inputs:
+      render_url:
+        description: "Render service base URL (e.g. https://ai-os-backend.onrender.com)"
+        required: true
+        type: string
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check root endpoint
+        run: |
+          curl -fsS "${{ inputs.render_url }}/" | tee root.json
+          grep -q "FORGE ASI online" root.json
+
+      - name: Check health endpoint
+        run: |
+          curl -fsS "${{ inputs.render_url }}/health/" | tee health.json
+          grep -q '"status"' health.json
+
+      - name: Check OpenAPI docs
+        run: curl -fsS -o /dev/null -w "%{http_code}" "${{ inputs.render_url }}/docs" | grep -q 200

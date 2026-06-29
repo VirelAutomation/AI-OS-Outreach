@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --glass-bg: rgba(10, 10, 10, 0.4);
+            --glass-border: rgba(227, 0, 15, 0.15);
+            --glow-red: rgba(227, 0, 15, 0.08);
+            --forge-red: #e3000f;
+            --forge-black: #0a0a0a;
+            --forge-white: #f0f0f0;
+        }
+        body {
+            background-color: var(--forge-black);
+            color: var(--forge-white);
+            font-family: 'Geist', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: inset 0 0 15px var(--glow-red);
+        }
+        .red-glow-focus:focus-within {
+            box-shadow: 0px 0px 15px var(--glow-red);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .funnel-step {
+            clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#1a1a1a",
+                      "inverse-primary": "#c0000b",
+                      "surface-tint": "#e3000f",
+                      "secondary-fixed": "#e2e2e2",
+                      "inverse-surface": "#f0f0f0",
+                      "primary-container": "#e3000f",
+                      "primary": "#e3000f",
+                      "outline": "#3a3a3a",
+                      "surface-dim": "#080808",
+                      "on-tertiary-container": "#f8f5f4",
+                      "tertiary-fixed": "#e4e2e1",
+                      "secondary": "#a0a0a0",
+                      "on-primary-fixed-variant": "#930006",
+                      "on-surface": "#f0f0f0",
+                      "on-tertiary-fixed-variant": "#474746",
+                      "surface-container-lowest": "#050505",
+                      "on-error": "#ffffff",
+                      "on-secondary-container": "#b4b5b5",
+                      "surface-container-high": "#151515",
+                      "error-container": "#93000a",
+                      "surface-variant": "#121212",
+                      "tertiary": "#c8c6c5",
+                      "on-surface-variant": "#808080",
+                      "tertiary-container": "#717070",
+                      "surface-container-low": "#0d0d0d",
+                      "on-secondary": "#1a1c1c",
+                      "on-primary-fixed": "#410001",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "error": "#ffb4ab",
+                      "secondary-fixed-dim": "#c6c6c7",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#ffdad5",
+                      "on-primary-container": "#ffffff",
+                      "surface-bright": "#1a1a1a",
+                      "secondary-container": "#2a2a2a",
+                      "surface": "#0a0a0a",
+                      "on-tertiary-fixed": "#1b1c1c",
+                      "background": "#0a0a0a",
+                      "tertiary-fixed-dim": "#c8c6c5",
+                      "outline-variant": "#2a2a2a",
+                      "on-background": "#f0f0f0",
+                      "on-tertiary": "#303030",
+                      "surface-container": "#111111",
+                      "primary-fixed-dim": "#ffb4aa",
+                      "on-secondary-fixed-variant": "#454747",
+                      "inverse-on-surface": "#0a0a0a",
+                      "on-error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "gutter": "20px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "xl": "40px",
+                      "margin": "32px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Geist"],
+                      "body-sm": ["Geist"],
+                      "headline-md": ["Geist"],
+                      "data-mono": ["JetBrains Mono"],
+                      "label-caps": ["Geist"],
+                      "headline-lg": ["Geist"],
+                      "headline-xl": ["Geist"]
+              },
+              "fontSize": {
+                      "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "data-mono": ["14px", {"lineHeight": "1.0", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar (Forge OS Standard) -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 bg-surface-dim border-r border-outline-variant flex flex-col py-lg px-md z-50">
+<div class="mb-xl px-sm">
+<h1 class="font-headline-lg text-headline-lg font-black tracking-tighter text-primary">NEURAL SALES</h1>
+<p class="font-label-caps text-[10px] tracking-[0.2em] opacity-50 uppercase">AI Command Center</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-md px-md py-sm text-on-primary bg-primary border-l-4 border-white font-bold transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps uppercase">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-highest hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="psychology">psychology</span>
+<span class="font-label-caps text-label-caps uppercase">Intelligence</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-highest hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_tree">account_tree</span>
+<span class="font-label-caps text-label-caps uppercase">Pipeline</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-highest hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-label-caps text-label-caps uppercase">Campaigns</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-highest hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group_add">group_add</span>
+<span class="font-label-caps text-label-caps uppercase">Lead Bank</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:bg-surface-container-highest hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="font-label-caps text-label-caps uppercase">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-lg space-y-sm px-sm">
+<button class="w-full bg-primary text-white font-label-caps py-md rounded-sm hover:brightness-110 transition-all flex items-center justify-center gap-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+            New Deployment
+        </button>
+<a class="flex items-center gap-md py-sm text-secondary hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="support_agent">support_agent</span>
+<span class="font-label-caps text-label-caps uppercase">Support</span>
+</a>
+<a class="flex items-center gap-md py-sm text-secondary hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="terminal">terminal</span>
+<span class="font-label-caps text-label-caps uppercase">Terminal</span>
+</a>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 flex flex-col max-w-[1600px] w-full">
+<!-- TopAppBar (Forge OS Standard) -->
+<header class="bg-surface/90 backdrop-blur-xl sticky top-0 z-50 border-b border-outline-variant">
+<div class="flex justify-between items-center w-full px-lg py-md">
+<div class="flex items-center gap-xl">
+<div class="flex items-center gap-md bg-primary/10 px-md py-1 border border-primary/20 rounded-sm">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-caps text-[11px] font-black text-primary uppercase">Day 1 / Phase 01</span>
+</div>
+<div class="hidden md:flex gap-lg items-center">
+<span class="font-data-mono text-[12px] text-primary">LIVE: <span id="live-timer">04:12:45</span></span>
+<span class="font-data-mono text-[12px] text-white">REVENUE: $1.2M</span>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<span class="font-label-caps text-[11px] text-on-surface-variant uppercase tracking-widest">Target: $15K MRR</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs mr-md">
+<button class="bg-surface-container-highest px-md py-xs rounded-sm text-white font-label-caps text-[11px] uppercase hover:bg-outline-variant transition-all">New Campaign</button>
+<button class="bg-primary text-white px-md py-xs rounded-sm font-label-caps text-[11px] uppercase hover:brightness-110 transition-all">Add Lead</button>
+</div>
+<div class="flex items-center gap-md text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors text-[20px]" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors text-[20px]" data-icon="history">history</span>
+<div class="w-8 h-8 rounded-sm overflow-hidden border border-outline-variant">
+<img alt="User Avatar" class="w-full h-full object-cover grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3VL6csduKR3yEkiVjBoOkO1VYc1rlSjYgl7W7_A4bRu6qoMMagzjUpDglny-e9k3qO3OdNtzZh2iONVhS7rYaepVinbU2iTk05cnJ4kbNe5zvoRqvuep3OCDhgw7wYTq7aJErlKRnZkkFgrc0KWse5RpGdTV4z665L3WZg9VPjxe9LsNj35ze8ZsJh8ol4oC2H0TcejE99Y2tWUR-JEunYr2nJ6addj96RD5hYEwdXgir1HO_wZqt0rDZHj73zuhDy_rpWAkywzI"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<div class="p-xl space-y-xl">
+<!-- Quick Actions Banner -->
+<div class="flex items-center justify-between gap-lg">
+<div class="flex gap-md">
+<button class="flex items-center gap-sm glass-card px-lg py-md rounded-sm hover:border-primary/40 transition-all group">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="call">call</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Log Call</span>
+</button>
+<button class="flex items-center gap-sm glass-card px-lg py-md rounded-sm hover:border-primary/40 transition-all group">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="campaign">campaign</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">New Campaign</span>
+</button>
+<button class="flex items-center gap-sm glass-card px-lg py-md rounded-sm hover:border-primary/40 transition-all group">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="person_add">person_add</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Add Lead</span>
+</button>
+</div>
+<div class="flex items-center gap-sm text-on-surface-variant opacity-60">
+<span class="font-data-mono text-[11px] uppercase tracking-widest">Sync Status: Nominal</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<!-- Bento Grid - Stats & Progress -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- Metric 1 -->
+<div class="md:col-span-3 glass-card p-lg rounded-sm flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-[11px] text-on-surface-variant uppercase tracking-widest block mb-xs">Total Leads</span>
+<h2 class="font-headline-xl text-headline-xl text-white">1,240</h2>
+</div>
+<div class="mt-lg flex items-center text-primary font-data-mono text-[11px]">
+<span class="material-symbols-outlined text-[14px] mr-1" data-icon="trending_up">trending_up</span>
+                    +12.5% VS LW
+                </div>
+</div>
+<!-- Metric 2 -->
+<div class="md:col-span-3 glass-card p-lg rounded-sm flex flex-col justify-between border-l-primary border-l-2">
+<div>
+<span class="font-label-caps text-[11px] text-on-surface-variant uppercase tracking-widest block mb-xs">Appointments</span>
+<h2 class="font-headline-xl text-headline-xl text-white">24</h2>
+</div>
+<div class="mt-lg flex items-center text-primary font-data-mono text-[11px]">
+<span class="material-symbols-outlined text-[14px] mr-1" data-icon="event_available">event_available</span>
+                    8 SCHEDULED TODAY
+                </div>
+</div>
+<!-- Progress Ring 1 -->
+<div class="md:col-span-3 glass-card p-lg rounded-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-[11px] text-on-surface-variant uppercase tracking-widest mb-xs">Weekly Calls</span>
+<span class="font-headline-md text-headline-md text-white">170/200</span>
+</div>
+<div class="relative w-16 h-16">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="text-white/5" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+<path class="text-primary progress-ring-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="85, 100" stroke-linecap="square" stroke-width="2.5"></path>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-data-mono text-[10px]">85%</span>
+</div>
+</div>
+<!-- Progress Ring 2 -->
+<div class="md:col-span-3 glass-card p-lg rounded-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-[11px] text-on-surface-variant uppercase tracking-widest mb-xs">Weekly Emails</span>
+<span class="font-headline-md text-headline-md text-white">4.6k/5k</span>
+</div>
+<div class="relative w-16 h-16">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="text-white/5" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+<path class="text-primary progress-ring-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="92, 100" stroke-linecap="square" stroke-width="2.5"></path>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-data-mono text-[10px]">92%</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- Conversion Funnel (Cleaned alignment) -->
+<div class="md:col-span-8 glass-card p-lg rounded-sm overflow-hidden relative">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h3 class="font-headline-md text-headline-md text-white uppercase tracking-tight">Conversion Funnel</h3>
+<p class="font-body-sm text-[12px] text-on-surface-variant opacity-60 uppercase tracking-widest">Revenue Closed: $8.4k (Today)</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="filter_alt">filter_alt</span>
+</div>
+<div class="flex flex-col gap-sm relative z-10 items-center">
+<!-- Step 1 -->
+<div class="funnel-step w-full h-14 bg-white/5 border border-white/10 flex items-center justify-between px-xl group hover:bg-white/10 transition-all cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="font-label-caps text-[11px] text-primary uppercase font-bold tracking-widest">Leads</span>
+<span class="font-data-mono text-[11px] opacity-40 uppercase">1,240 ENTERED</span>
+</div>
+<span class="font-headline-md text-headline-md text-white">100%</span>
+</div>
+<!-- Step 2 -->
+<div class="funnel-step w-[82%] h-14 bg-white/5 border border-white/10 flex items-center justify-between px-xl group hover:bg-white/10 transition-all cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="font-label-caps text-[11px] text-primary uppercase font-bold tracking-widest">Calls</span>
+<span class="font-data-mono text-[11px] opacity-40 uppercase">482 OUTBOUND</span>
+</div>
+<span class="font-headline-md text-headline-md text-white">38.8%</span>
+</div>
+<!-- Step 3 -->
+<div class="funnel-step w-[64%] h-14 bg-white/5 border border-white/10 flex items-center justify-between px-xl group hover:bg-white/10 transition-all cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="font-label-caps text-[11px] text-primary uppercase font-bold tracking-widest">Meetings</span>
+<span class="font-data-mono text-[11px] opacity-40 uppercase">24 SCHEDULED</span>
+</div>
+<span class="font-headline-md text-headline-md text-white">5.0%</span>
+</div>
+<!-- Step 4 -->
+<div class="funnel-step w-[46%] h-14 bg-primary/20 border border-primary/40 flex items-center justify-between px-xl group hover:bg-primary/30 transition-all cursor-pointer shadow-[0_0_30px_rgba(227,0,15,0.15)]">
+<div class="flex items-center gap-md">
+<span class="font-label-caps text-[11px] text-primary uppercase font-bold tracking-widest">Closed</span>
+<span class="font-data-mono text-[11px] text-primary uppercase">9 DEALS WON</span>
+</div>
+<span class="font-headline-md text-headline-md text-primary">1.8%</span>
+</div>
+</div>
+<!-- Subtle Decorative Glow behind funnel -->
+<div class="absolute -bottom-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/10 blur-[100px] rounded-full"></div>
+</div>
+<!-- Activity Feed -->
+<div class="md:col-span-4 glass-card p-lg rounded-sm flex flex-col">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-headline-md text-headline-md text-white uppercase tracking-tight">Recent Activity</h3>
+<span class="font-label-caps text-[11px] text-primary cursor-pointer hover:underline uppercase tracking-widest">View All</span>
+</div>
+<div class="flex-1 space-y-lg overflow-y-auto max-h-[400px] pr-sm scrollbar-hide">
+<!-- Activity Item -->
+<div class="flex gap-md group">
+<div class="w-10 h-10 rounded-sm bg-surface-container-highest flex items-center justify-center shrink-0 border border-outline-variant group-hover:border-primary/40 transition-all">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="phone_callback">phone_callback</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-[13px] text-white">Call Completed with <strong class="text-primary font-bold">Marcus V.</strong></span>
+<span class="font-data-mono text-[10px] text-on-surface-variant uppercase opacity-60">2 MINS AGO // DUR: 12:40</span>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="w-10 h-10 rounded-sm bg-surface-container-highest flex items-center justify-center shrink-0 border border-outline-variant group-hover:border-primary/40 transition-all">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-[13px] text-white">Deal Closed: <strong class="text-primary font-bold">$2,400</strong></span>
+<span class="font-data-mono text-[10px] text-on-surface-variant uppercase opacity-60">14 MINS AGO // ACME CORP</span>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="w-10 h-10 rounded-sm bg-surface-container-highest flex items-center justify-center shrink-0 border border-outline-variant group-hover:border-primary/40 transition-all">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="mail">mail</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-[13px] text-white">Email Opened by <strong class="text-white font-bold">Sarah J.</strong></span>
+<span class="font-data-mono text-[10px] text-on-surface-variant uppercase opacity-60">45 MINS AGO // Q4 PROPOSAL</span>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="w-10 h-10 rounded-sm bg-surface-container-highest flex items-center justify-center shrink-0 border border-outline-variant group-hover:border-primary/40 transition-all">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="calendar_today">calendar_today</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-[13px] text-white">New Appointment Set</span>
+<span class="font-data-mono text-[10px] text-on-surface-variant uppercase opacity-60">1 HOUR AGO // TOMORROW 10:00AM</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Meta (Forge OS Standard) -->
+<div class="flex justify-between items-center pt-xl border-t border-outline-variant">
+<div class="flex gap-lg">
+<div class="flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-caps text-[10px] opacity-40 uppercase tracking-widest">System Status: Optimal</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[14px] opacity-40" data-icon="shield">shield</span>
+<span class="font-label-caps text-[10px] opacity-40 uppercase tracking-widest">Encryption: Active</span>
+</div>
+</div>
+<span class="font-data-mono text-[10px] opacity-40 uppercase">Build v2.4.1029 // Forge OS Core</span>
+</div>
+</div>
+</main>
+<script>
+    // Live timer sync
+    let seconds = 15168; // Starting from 04:12:48
+    const timerDisplay = document.getElementById('live-timer');
+    
+    setInterval(() => {
+        seconds++;
+        const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+        const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+        const s = (seconds % 60).toString().padStart(2, '0');
+        timerDisplay.textContent = `${h}:${m}:${s}`;
+    }, 1000);
+
+    // Subtle mouse interaction for glass-cards
+    document.querySelectorAll('.glass-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            card.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(227, 0, 15, 0.05) 0%, rgba(10, 10, 10, 0.4) 50%)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.background = 'var(--glass-bg)';
+        });
+    });
+</script>
+</body></html>

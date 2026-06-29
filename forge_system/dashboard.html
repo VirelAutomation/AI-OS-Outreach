@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE ASI — Command Center</title>
+<style>
+  :root {
+    --bg:       #0a0c10;
+    --panel:    #111420;
+    --border:   #1e2540;
+    --accent:   #4f8ef7;
+    --green:    #22c55e;
+    --amber:    #f59e0b;
+    --red:      #ef4444;
+    --purple:   #a855f7;
+    --cyan:     #06b6d4;
+    --text:     #e2e8f0;
+    --muted:    #64748b;
+    --glow:     0 0 20px rgba(79,142,247,0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    min-height: 100vh;
+  }
+  /* ── Header ──────────────────────────────────────────────────────────────── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(90deg, #0a0c10 0%, #111420 100%);
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo-text { font-size: 16px; font-weight: 700; letter-spacing: 2px; color: var(--text); }
+  .logo-sub { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+  .status-pill {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 20px;
+    background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3);
+    font-size: 11px; color: var(--green);
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+  /* ── Layout ──────────────────────────────────────────────────────────────── */
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: auto 1fr;
+    height: calc(100vh - 69px);
+  }
+  .sidebar {
+    grid-row: 1 / -1;
+    border-right: 1px solid var(--border);
+    padding: 16px;
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .main { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+
+  /* ── Nav items ───────────────────────────────────────────────────────────── */
+  .nav-section { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; padding: 8px 4px 4px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-radius: 8px; cursor: pointer;
+    transition: all 0.15s; color: var(--muted); font-size: 12px;
+    border: 1px solid transparent;
+  }
+  .nav-item:hover { background: var(--border); color: var(--text); }
+  .nav-item.active {
+    background: rgba(79,142,247,0.1); color: var(--accent);
+    border-color: rgba(79,142,247,0.3);
+  }
+  .nav-item .icon { font-size: 14px; width: 20px; text-align: center; }
+  .nav-badge {
+    margin-left: auto; padding: 1px 6px; border-radius: 10px;
+    background: rgba(79,142,247,0.2); color: var(--accent);
+    font-size: 10px;
+  }
+
+  /* ── AEI Status bar ──────────────────────────────────────────────────────── */
+  .aei-bar {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    padding: 12px 16px;
+    background: var(--panel); border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .aei-chip {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 20px; font-size: 11px;
+    background: rgba(79,142,247,0.08); border: 1px solid rgba(79,142,247,0.2);
+    color: var(--accent);
+  }
+  .aei-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+  /* ── Panels ──────────────────────────────────────────────────────────────── */
+  .panel {
+    background: var(--panel); border-radius: 12px; border: 1px solid var(--border);
+    padding: 16px; box-shadow: var(--glow);
+  }
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .panel-title {
+    font-size: 12px; font-weight: 600; letter-spacing: 1px;
+    color: var(--text); display: flex; align-items: center; gap: 8px;
+  }
+  .panel-title .tag {
+    font-size: 9px; padding: 2px 6px; border-radius: 4px;
+    background: rgba(79,142,247,0.15); color: var(--accent); letter-spacing: 1px;
+  }
+
+  /* ── Metrics grid ────────────────────────────────────────────────────────── */
+  .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .metric-card {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .metric-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+  .metric-value { font-size: 26px; font-weight: 700; color: var(--text); line-height: 1; }
+  .metric-sub { font-size: 10px; color: var(--muted); }
+  .metric-accent { color: var(--accent); }
+  .metric-green  { color: var(--green); }
+  .metric-amber  { color: var(--amber); }
+  .metric-red    { color: var(--red); }
+
+  /* ── Campaign cards ──────────────────────────────────────────────────────── */
+  .campaign-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .campaign-card {
+    background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .campaign-card:hover { border-color: var(--accent); background: rgba(79,142,247,0.05); }
+  .campaign-name { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .campaign-seg  { font-size: 10px; color: var(--muted); margin-bottom: 12px; letter-spacing: 1px; }
+  .grade-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 13px; font-weight: 700; margin-bottom: 10px;
+  }
+  .grade-S { background: rgba(255,215,0,0.15);  color: gold; border: 1px solid rgba(255,215,0,0.3); }
+  .grade-A { background: rgba(34,197,94,0.15);  color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .grade-B { background: rgba(79,142,247,0.15); color: var(--accent); border: 1px solid rgba(79,142,247,0.3); }
+  .grade-C { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .grade-F { background: rgba(239,68,68,0.15);  color: var(--red);   border: 1px solid rgba(239,68,68,0.3); }
+  .campaign-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 6px; font-size: 11px;
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 2px; }
+  .stat-label { font-size: 9px; color: var(--muted); letter-spacing: 1px; }
+  .stat-val   { font-weight: 600; }
+  .weakness {
+    margin-top: 10px; padding: 6px 10px; border-radius: 6px;
+    background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.15);
+    font-size: 10px; color: var(--red);
+  }
+
+  /* ── ASI Command Interface ───────────────────────────────────────────────── */
+  .cmd-form { display: flex; gap: 8px; }
+  .cmd-input {
+    flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; color: var(--text); font-size: 13px;
+    font-family: inherit; outline: none;
+    transition: border-color 0.15s;
+  }
+  .cmd-input:focus { border-color: var(--accent); }
+  .cmd-input::placeholder { color: var(--muted); }
+  .btn {
+    padding: 10px 18px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.15s; font-family: inherit;
+    letter-spacing: 0.5px;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+  }
+  .btn-primary:hover { background: #6b9ffa; }
+  .btn-ghost {
+    background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── Response output ─────────────────────────────────────────────────────── */
+  .response-box {
+    background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px; min-height: 100px; max-height: 320px;
+    overflow-y: auto; font-size: 12px; line-height: 1.7;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .response-meta {
+    display: flex; gap: 16px; margin-bottom: 10px; font-size: 10px; color: var(--muted);
+  }
+  .meta-chip {
+    padding: 2px 8px; border-radius: 4px;
+    background: rgba(255,255,255,0.05);
+  }
+  .insight-list { margin-top: 12px; }
+  .insight-item {
+    padding: 7px 10px; margin-bottom: 5px; border-radius: 6px;
+    background: rgba(79,142,247,0.06); border-left: 2px solid var(--accent);
+    font-size: 11px; color: var(--text);
+  }
+  .next-step-item {
+    padding: 7px 10px; margin-bottom: 5px; border-radius: 6px;
+    background: rgba(34,197,94,0.06); border-left: 2px solid var(--green);
+    font-size: 11px; color: var(--text);
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .step-num {
+    font-size: 10px; font-weight: 700; color: var(--green);
+    min-width: 16px;
+  }
+
+  /* ── Jarvis Chat ─────────────────────────────────────────────────────────── */
+  .chat-box {
+    height: 280px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 10px; background: rgba(0,0,0,0.2);
+    border-radius: 8px; margin-bottom: 10px;
+  }
+  .msg { display: flex; flex-direction: column; max-width: 85%; }
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.assistant { align-self: flex-start; align-items: flex-start; }
+  .msg-bubble {
+    padding: 9px 13px; border-radius: 12px; font-size: 12px;
+    line-height: 1.6; word-break: break-word;
+  }
+  .msg.user .msg-bubble     { background: var(--accent); color: #fff; border-radius: 12px 12px 2px 12px; }
+  .msg.assistant .msg-bubble { background: rgba(255,255,255,0.06); color: var(--text); border-radius: 12px 12px 12px 2px; }
+  .msg-meta { font-size: 9px; color: var(--muted); margin-top: 3px; }
+
+  /* ── Tables ──────────────────────────────────────────────────────────────── */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { font-size: 10px; letter-spacing: 1px; color: var(--muted); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  td { padding: 10px 12px; border-bottom: 1px solid rgba(30,37,64,0.5); color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ── Grid layouts ────────────────────────────────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  /* ── Loader ──────────────────────────────────────────────────────────────── */
+  .loader { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading { opacity: 0.5; font-size: 11px; color: var(--muted); }
+
+  /* ── Scrollbar ───────────────────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── Tab system ──────────────────────────────────────────────────────────── */
+  .tabs { display: flex; gap: 2px; margin-bottom: 14px; }
+  .tab {
+    padding: 7px 14px; border-radius: 6px; font-size: 11px; cursor: pointer;
+    color: var(--muted); transition: all 0.15s; border: 1px solid transparent;
+  }
+  .tab.active { background: rgba(79,142,247,0.1); color: var(--accent); border-color: rgba(79,142,247,0.3); }
+  .tab:hover:not(.active) { color: var(--text); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── Quick actions ───────────────────────────────────────────────────────── */
+  .quick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+  .quick-btn {
+    padding: 10px; border-radius: 8px; font-size: 11px; cursor: pointer;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    color: var(--muted); text-align: center; transition: all 0.15s;
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+  }
+  .quick-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(79,142,247,0.05); }
+  .quick-btn .qicon { font-size: 18px; }
+
+  /* ── Empty state ─────────────────────────────────────────────────────────── */
+  .empty { text-align: center; padding: 32px; color: var(--muted); font-size: 12px; }
+  .empty-icon { font-size: 32px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <div>
+      <div class="logo-text">FORGE ASI</div>
+      <div class="logo-sub">AIKIAA OPS FORGE — COMMAND CENTER</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div id="server-status" class="status-pill">
+      <div class="status-dot"></div>
+      <span id="status-text">Connecting...</span>
+    </div>
+    <input id="base-url" class="cmd-input" style="width:200px;padding:6px 10px;font-size:11px;" value="http://localhost:8000" placeholder="API URL">
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="nav-section">NAVIGATION</div>
+    <div class="nav-item active" onclick="showSection('dashboard')">
+      <span class="icon">📊</span> Dashboard
+    </div>
+    <div class="nav-item" onclick="showSection('asi')">
+      <span class="icon">🧠</span> ASI Orchestrator
+    </div>
+    <div class="nav-item" onclick="showSection('campaigns')">
+      <span class="icon">📧</span> Campaigns
+    </div>
+    <div class="nav-item" onclick="showSection('jarvis')">
+      <span class="icon">🤖</span> Jarvis Chat
+    </div>
+    <div class="nav-item" onclick="showSection('intel')">
+      <span class="icon">🔍</span> Intel AEI
+    </div>
+    <div class="nav-item" onclick="showSection('ops')">
+      <span class="icon">⚙️</span> OPS AEI
+    </div>
+
+    <div class="nav-section" style="margin-top:8px;">AEI STATUS</div>
+    <div id="sidebar-aeis"></div>
+
+    <div class="nav-section" style="margin-top:8px;">QUICK ACTIONS</div>
+    <div class="quick-grid">
+      <div class="quick-btn" onclick="quickAction('digest')"><span class="qicon">☀️</span>Digest</div>
+      <div class="quick-btn" onclick="quickAction('health')"><span class="qicon">💚</span>Health</div>
+      <div class="quick-btn" onclick="quickAction('analytics')"><span class="qicon">📈</span>Analytics</div>
+      <div class="quick-btn" onclick="quickAction('schedule')"><span class="qicon">📅</span>Schedule</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="main-content">
+
+    <!-- DASHBOARD -->
+    <div id="section-dashboard">
+      <div class="aei-bar" id="aei-bar">
+        <span class="loading">Loading AEI status...</span>
+      </div>
+
+      <div class="metrics-grid" id="metrics-grid">
+        <div class="metric-card"><div class="metric-label">ACTIVE CAMPAIGNS</div><div class="metric-value" id="m-campaigns">—</div></div>
+        <div class="metric-card"><div class="metric-label">TOTAL SENT</div><div class="metric-value metric-accent" id="m-sent">—</div></div>
+        <div class="metric-card"><div class="metric-label">REPLY RATE</div><div class="metric-value metric-green" id="m-reply">—</div><div class="metric-sub" id="m-replies">— replies</div></div>
+        <div class="metric-card"><div class="metric-label">MEETINGS BOOKED</div><div class="metric-value" id="m-meetings" style="color:var(--purple)">—</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">📧 Campaign Performance <span class="tag">LIVE</span></div>
+          <button class="btn btn-ghost" onclick="loadDashboard()" style="padding:5px 10px;font-size:11px;">↻ Refresh</button>
+        </div>
+        <div id="campaign-cards" class="campaign-grid">
+          <div class="empty"><div class="empty-icon">📭</div>No active campaigns</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASI ORCHESTRATOR -->
+    <div id="section-asi" style="display:none;">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🧠 ASI Orchestrator <span class="tag">COMMAND</span></div>
+        </div>
+        <div class="cmd-form" style="margin-bottom:10px;">
+          <input class="cmd-input" id="cmd-input" placeholder="Ask anything… 'What's our best-performing campaign?' / 'Why is reply rate low?' / 'Research Acme Legal'" onkeydown="if(event.key==='Enter') sendCommand()">
+          <button class="btn btn-primary" id="cmd-btn" onclick="sendCommand()">Execute</button>
+        </div>
+        <div id="cmd-suggestions" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+          <span class="meta-chip" style="cursor:pointer;font-size:10px;" onclick="setCmd('What is the current state of all active campaigns?')">Campaign status</span>
+          <span class="meta-chip" style="cursor:pointer;font-size:10px;" onclick="setCmd('Why is our reply rate low and what should we change?')">Fix reply rate</span>
+          <span class="meta-chip" style="cursor:pointer;font-size:10px;" onclick="setCmd('Give me this morning operations digest')">Ops digest</span>
+          <span class="meta-chip" style="cursor:pointer;font-size:10px;" onclick="setCmd('What market opportunities should we target next?')">Opportunities</span>
+        </div>
+        <div id="cmd-response" style="display:none;">
+          <div class="response-meta" id="cmd-meta"></div>
+          <div class="response-box" id="cmd-text"></div>
+          <div id="cmd-insights" class="insight-list"></div>
+          <div id="cmd-steps" style="margin-top:8px;"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🤖 AEI Network Status</div>
+          <button class="btn btn-ghost" onclick="loadASIStatus()" style="padding:5px 10px;font-size:11px;">↻ Refresh</button>
+        </div>
+        <div id="aei-network-table"><div class="empty">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- CAMPAIGNS -->
+    <div id="section-campaigns" style="display:none;">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">📧 Campaign Analytics <span class="tag">ANALYTICS AEI</span></div>
+          <button class="btn btn-ghost" onclick="loadAnalytics()" style="padding:5px 10px;font-size:11px;">↻ Run Analysis</button>
+        </div>
+        <div id="analytics-output"><div class="empty"><div class="empty-icon">📊</div>Click Run Analysis to get AI-powered campaign insights</div></div>
+      </div>
+    </div>
+
+    <!-- JARVIS CHAT -->
+    <div id="section-jarvis" style="display:none;">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🤖 Jarvis <span class="tag">JARVIS AEI</span></div>
+          <div style="font-size:10px;color:var(--muted);" id="jarvis-mem"></div>
+        </div>
+        <div class="chat-box" id="chat-box">
+          <div class="msg assistant">
+            <div class="msg-bubble">Hi, I'm Jarvis. Ask me anything about your campaigns, leads, real estate, or business operations.</div>
+          </div>
+        </div>
+        <div class="cmd-form">
+          <input class="cmd-input" id="chat-input" placeholder="Ask Jarvis anything…" onkeydown="if(event.key==='Enter') sendJarvis()">
+          <button class="btn btn-primary" onclick="sendJarvis()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTEL AEI -->
+    <div id="section-intel" style="display:none;">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🔍 Intel AEI — Company Research</div>
+        </div>
+        <div class="cmd-form" style="margin-bottom:14px;">
+          <input class="cmd-input" id="intel-company" placeholder="Company name (e.g. LexCorp Legal Partners)">
+          <input class="cmd-input" style="max-width:160px;" id="intel-industry" placeholder="Industry (optional)">
+          <button class="btn btn-primary" onclick="runIntel()">Research</button>
+        </div>
+        <div id="intel-output"><div class="empty"><div class="empty-icon">🔍</div>Enter a company name to generate an Intel brief</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🌐 Market Opportunities</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <button class="btn btn-ghost" onclick="runOpportunities('legal')">Legal</button>
+          <button class="btn btn-ghost" onclick="runOpportunities('ecommerce')">Ecommerce</button>
+          <button class="btn btn-ghost" onclick="runOpportunities('fintech')">Fintech</button>
+        </div>
+        <div id="opportunities-output"><div class="empty">Select a segment to identify opportunities</div></div>
+      </div>
+    </div>
+
+    <!-- OPS AEI -->
+    <div id="section-ops" style="display:none;">
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">☀️ Daily Digest <span class="tag">OPS AEI</span></div>
+            <button class="btn btn-ghost" onclick="loadDigest()" style="padding:5px 10px;font-size:11px;">↻ Refresh</button>
+          </div>
+          <div id="ops-digest"><div class="loading">Loading digest…</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📋 Draft Queue</div>
+            <button class="btn btn-ghost" onclick="loadQueue()" style="padding:5px 10px;font-size:11px;">↻ Check</button>
+          </div>
+          <div id="ops-queue"><div class="loading">Loading queue…</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">📅 Today's Automation Schedule</div>
+          <button class="btn btn-ghost" onclick="loadSchedule()" style="padding:5px 10px;font-size:11px;">↻ Load</button>
+        </div>
+        <div id="ops-schedule"><div class="loading">Loading schedule…</div></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const API = () => document.getElementById('base-url').value.replace(/\/$/, '');
+let jarvisSession = 'session_' + Math.random().toString(36).slice(2, 10);
+
+// ── API helper ────────────────────────────────────────────────────────────────
+async function api(method, path, body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const r = await fetch(API() + path, opts);
+    if (!r.ok) throw new Error(`${r.status}: ${await r.text()}`);
+    return await r.json();
+  } catch (e) {
+    throw e;
+  }
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+function showSection(name) {
+  document.querySelectorAll('[id^="section-"]').forEach(el => el.style.display = 'none');
+  document.getElementById('section-' + name).style.display = '';
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget && event.currentTarget.classList.add('active');
+  if (name === 'dashboard') loadDashboard();
+  if (name === 'asi') loadASIStatus();
+  if (name === 'ops') { loadDigest(); loadQueue(); loadSchedule(); }
+}
+
+// ── Server health ─────────────────────────────────────────────────────────────
+async function checkHealth() {
+  try {
+    const data = await api('GET', '/health/');
+    document.getElementById('status-text').textContent = 'ASI Online';
+    document.getElementById('server-status').style.borderColor = 'rgba(34,197,94,0.3)';
+    loadDashboard();
+    loadSidebarAEIs();
+  } catch (e) {
+    document.getElementById('status-text').textContent = 'Offline — start server';
+    document.getElementById('server-status').style.background = 'rgba(239,68,68,0.1)';
+    document.getElementById('server-status').style.borderColor = 'rgba(239,68,68,0.3)';
+    document.getElementById('server-status').style.color = 'var(--red)';
+    document.querySelector('.status-dot').style.background = 'var(--red)';
+    document.querySelector('.status-dot').style.boxShadow = '0 0 6px var(--red)';
+  }
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const [dashData, asiData] = await Promise.all([
+      api('GET', '/events/dashboard/'),
+      api('GET', '/asi/').catch(() => null),
+    ]);
+    renderMetrics(dashData);
+    renderCampaignCards(dashData.campaigns || []);
+    if (asiData) renderAEIBar(asiData.aeis);
+  } catch (e) {
+    console.error('Dashboard load failed:', e);
+  }
+}
+
+function renderMetrics(data) {
+  document.getElementById('m-campaigns').textContent = data.active_campaigns ?? '—';
+  document.getElementById('m-sent').textContent = (data.totals?.sent ?? 0).toLocaleString();
+  document.getElementById('m-reply').textContent = (data.overall_reply_rate ?? 0) + '%';
+  document.getElementById('m-replies').textContent = (data.totals?.replies ?? 0) + ' replies';
+  document.getElementById('m-meetings').textContent = data.totals?.meetings ?? '—';
+}
+
+function renderAEIBar(aeis) {
+  if (!aeis) return;
+  const bar = document.getElementById('aei-bar');
+  bar.innerHTML = Object.entries(aeis).map(([name, info]) => `
+    <div class="aei-chip">
+      <div class="aei-dot"></div>
+      ${name.toUpperCase()} AEI
+      ${info.pending_tasks > 0 ? `<span style="color:var(--amber);font-size:9px;">${info.pending_tasks}</span>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderCampaignCards(campaigns) {
+  const el = document.getElementById('campaign-cards');
+  if (!campaigns.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>No active campaigns<br><small>Create one via POST /campaigns/</small></div>';
+    return;
+  }
+  el.innerHTML = campaigns.map(c => `
+    <div class="campaign-card">
+      <div class="campaign-name">${c.name}</div>
+      <div class="campaign-seg">${(c.segment || '').toUpperCase()}</div>
+      <span class="grade-badge grade-${c.grade}">${c.grade} · ${c.rating}/100</span>
+      <div class="campaign-stats">
+        <div class="stat-item"><div class="stat-label">SENT</div><div class="stat-val">${c.sent}</div></div>
+        <div class="stat-item"><div class="stat-label">REPLIES</div><div class="stat-val metric-green">${c.replies}</div></div>
+        <div class="stat-item"><div class="stat-label">MEETINGS</div><div class="stat-val" style="color:var(--purple)">${c.meetings}</div></div>
+      </div>
+      ${c.weakest_axis ? `<div class="weakness">⚠ ${c.weakest_axis}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ── Sidebar AEIs ──────────────────────────────────────────────────────────────
+async function loadSidebarAEIs() {
+  try {
+    const data = await api('GET', '/asi/');
+    const el = document.getElementById('sidebar-aeis');
+    el.innerHTML = Object.keys(data.aeis || {}).map(name => `
+      <div class="nav-item" style="padding:6px 12px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;"></span>
+        ${name.toUpperCase()} AEI
+      </div>
+    `).join('');
+  } catch (e) {}
+}
+
+// ── ASI Orchestrator ──────────────────────────────────────────────────────────
+async function sendCommand() {
+  const input = document.getElementById('cmd-input');
+  const btn = document.getElementById('cmd-btn');
+  const cmd = input.value.trim();
+  if (!cmd) return;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader"></span>';
+  document.getElementById('cmd-response').style.display = 'none';
+  try {
+    const data = await api('POST', '/asi/command/', { command: cmd });
+    document.getElementById('cmd-response').style.display = 'block';
+    document.getElementById('cmd-meta').innerHTML = `
+      <span class="meta-chip">ID: ${data.command_id}</span>
+      <span class="meta-chip">AEIs: ${(data.aeis_involved || []).join(', ') || 'none'}</span>
+      <span class="meta-chip">Tasks: ${(data.actions_taken || []).length}</span>
+      <span class="meta-chip">Confidence: ${Math.round((data.confidence || 0) * 100)}%</span>
+    `;
+    document.getElementById('cmd-text').textContent = data.response;
+    document.getElementById('cmd-insights').innerHTML = (data.insights || []).map(i =>
+      `<div class="insight-item">💡 ${i}</div>`).join('');
+    document.getElementById('cmd-steps').innerHTML = (data.next_steps || []).length
+      ? '<div style="font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;">NEXT STEPS</div>' +
+        (data.next_steps || []).map((s, i) => `<div class="next-step-item"><span class="step-num">${i+1}.</span>${s}</div>`).join('')
+      : '';
+  } catch (e) {
+    document.getElementById('cmd-response').style.display = 'block';
+    document.getElementById('cmd-text').textContent = 'Error: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Execute';
+  }
+}
+
+function setCmd(text) {
+  document.getElementById('cmd-input').value = text;
+  document.getElementById('cmd-input').focus();
+}
+
+async function loadASIStatus() {
+  try {
+    const data = await api('GET', '/asi/');
+    const el = document.getElementById('aei-network-table');
+    el.innerHTML = `
+      <table>
+        <thead><tr><th>AEI</th><th>STATUS</th><th>CAPABILITIES</th><th>PENDING TASKS</th></tr></thead>
+        <tbody>
+          ${Object.entries(data.aeis || {}).map(([name, info]) => `
+            <tr>
+              <td style="font-weight:600;">${name.toUpperCase()}</td>
+              <td><span style="color:var(--green);font-size:11px;">● ${info.status || 'active'}</span></td>
+              <td style="color:var(--muted);font-size:11px;">${(info.capabilities || []).join(' · ')}</td>
+              <td style="color:${(info.pending_tasks || 0) > 0 ? 'var(--amber)' : 'var(--muted)'};">${info.pending_tasks || 0}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch (e) {
+    document.getElementById('aei-network-table').innerHTML = `<div class="empty">Error loading: ${e.message}</div>`;
+  }
+}
+
+// ── Analytics ─────────────────────────────────────────────────────────────────
+async function loadAnalytics() {
+  const el = document.getElementById('analytics-output');
+  el.innerHTML = '<div class="loading"><span class="loader"></span> Running Analytics AEI…</div>';
+  try {
+    const data = await api('GET', '/asi/analytics/');
+    if (!data.campaigns_analyzed) {
+      el.innerHTML = '<div class="empty">No active campaigns to analyze</div>';
+      return;
+    }
+    el.innerHTML = `
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">${data.summary}</div>
+      ${(data.analysis || []).map(c => `
+        <div style="padding:12px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid var(--border);margin-bottom:8px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span class="grade-badge grade-${c.grade}" style="margin:0;">${c.grade} · ${c.rating}/100</span>
+            <span style="font-weight:600;">${c.name}</span>
+            <span style="font-size:10px;color:var(--muted);">${(c.segment||'').toUpperCase()}</span>
+          </div>
+          <div style="font-size:11px;color:var(--amber);margin-bottom:6px;">⚠ ${c.weakest_axis}</div>
+          <div class="insight-item" style="margin-bottom:6px;">${c.ai_recommendation}</div>
+        </div>
+      `).join('')}
+    `;
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+// ── Jarvis Chat ───────────────────────────────────────────────────────────────
+async function sendJarvis() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  appendMessage('user', msg);
+  const thinking = appendMessage('assistant', '…');
+  try {
+    const data = await api('POST', '/jarvis/chat/', { session_id: jarvisSession, content: msg });
+    thinking.querySelector('.msg-bubble').textContent = data.response;
+    thinking.querySelector('.msg-meta').textContent = `${data.latency_ms}ms · ${data.model_version}${data.memory_retrieved > 0 ? ` · ${data.memory_retrieved} memories` : ''}`;
+    document.getElementById('jarvis-mem').textContent = data.memory_retrieved > 0 ? `🧠 ${data.memory_retrieved} memories retrieved` : '';
+  } catch (e) {
+    thinking.querySelector('.msg-bubble').textContent = 'Error: ' + e.message;
+    thinking.querySelector('.msg-bubble').style.color = 'var(--red)';
+  }
+  document.getElementById('chat-box').scrollTop = 9999;
+}
+
+function appendMessage(role, text) {
+  const box = document.getElementById('chat-box');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-meta"></div>`;
+  box.appendChild(div);
+  box.scrollTop = 9999;
+  return div;
+}
+
+// ── Intel AEI ─────────────────────────────────────────────────────────────────
+async function runIntel() {
+  const company = document.getElementById('intel-company').value.trim();
+  const industry = document.getElementById('intel-industry').value.trim();
+  if (!company) return;
+  const el = document.getElementById('intel-output');
+  el.innerHTML = '<div class="loading"><span class="loader"></span> Running Intel AEI research…</div>';
+  try {
+    const data = await api('POST', '/asi/intel/research/', { company_name: company, industry });
+    el.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <div style="font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;">PAIN POINTS</div>
+          ${(data.pain_points||[]).map(p => `<div class="insight-item">${p}</div>`).join('')}
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;">DECISION MAKERS</div>
+          ${(data.decision_makers||[]).map(d => `<div class="insight-item">${d}</div>`).join('')}
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;">HOOK ANGLE</div>
+        <div class="next-step-item">${data.hook_angle}</div>
+      </div>
+      <div style="margin-top:10px;">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;">COMPETITIVE CONTEXT</div>
+        <div style="font-size:12px;color:var(--muted);padding:8px;background:rgba(0,0,0,0.2);border-radius:6px;">${data.competitive_context}</div>
+      </div>
+    `;
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+async function runOpportunities(segment) {
+  const el = document.getElementById('opportunities-output');
+  el.innerHTML = '<div class="loading"><span class="loader"></span> Identifying opportunities…</div>';
+  try {
+    const data = await api('GET', `/asi/intel/opportunities/${segment}/`);
+    if (data.error) { el.innerHTML = `<div class="empty">${data.error}</div>`; return; }
+    el.innerHTML = `
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">${data.market_summary || ''}</div>
+      ${(data.opportunities||[]).map((o, i) => `
+        <div style="padding:12px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;background:rgba(255,255,255,0.02);">
+          <div style="font-weight:600;margin-bottom:4px;">${i+1}. ${o.title}</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">${o.why_now}</div>
+          <div style="font-size:11px;color:var(--accent);margin-bottom:4px;">Target: ${o.ideal_target}</div>
+          <div class="next-step-item" style="margin:0;">${o.hook}</div>
+        </div>
+      `).join('')}
+    `;
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+// ── OPS AEI ───────────────────────────────────────────────────────────────────
+async function loadDigest() {
+  const el = document.getElementById('ops-digest');
+  try {
+    const data = await api('GET', '/asi/ops/digest/');
+    const color = data.health === 'healthy' ? 'var(--green)' : data.health === 'degraded' ? 'var(--amber)' : 'var(--red)';
+    el.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <span style="color:${color};font-size:18px;">●</span>
+        <span style="font-weight:600;font-size:13px;">System ${data.health}</span>
+        <span style="font-size:10px;color:var(--muted);">${data.date}</span>
+      </div>
+      ${(data.digest_bullets||[]).map((b, i) => `
+        <div class="next-step-item" style="margin-bottom:6px;"><span class="step-num">${i+1}.</span>${b}</div>
+      `).join('')}
+    `;
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+async function loadQueue() {
+  const el = document.getElementById('ops-queue');
+  try {
+    const data = await api('GET', '/asi/ops/queue/');
+    const urgencyColor = data.review_urgency === 'high' ? 'var(--red)' : data.review_urgency === 'medium' ? 'var(--amber)' : 'var(--green)';
+    el.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div class="metric-card" style="padding:10px;">
+          <div class="metric-label">PENDING REVIEW</div>
+          <div class="metric-value" style="color:${urgencyColor};font-size:22px;">${data.draft_queue_depth}</div>
+        </div>
+        <div class="metric-card" style="padding:10px;">
+          <div class="metric-label">APPROVED UNSENT</div>
+          <div class="metric-value" style="font-size:22px;">${data.approved_unsent}</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);">${data.recommendation}</div>
+    `;
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+async function loadSchedule() {
+  const el = document.getElementById('ops-schedule');
+  try {
+    const data = await api('GET', '/asi/ops/schedule/');
+    if (!data.campaigns_with_steps_due) {
+      el.innerHTML = `<div class="empty">No automation steps due today (${data.date})</div>`;
+      return;
+    }
+    el.innerHTML = `
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">${data.date} — ${data.campaigns_with_steps_due} campaign(s) with steps due</div>
+      ${(data.schedule||[]).map(c => `
+        <div style="padding:10px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;">
+          <div style="font-weight:600;margin-bottom:6px;">${c.campaign_name} <span style="font-size:10px;color:var(--muted);">(Day ${c.day_in_plan})</span></div>
+          ${(c.steps_due||[]).map(s => `
+            <div style="font-size:11px;color:var(--text);padding:5px 8px;background:rgba(79,142,247,0.05);border-radius:5px;margin-bottom:4px;">
+              Day ${s.day}: ${s.action} <span style="color:var(--accent);">(batch: ${s.batch_size})</span>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+    `;
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+// ── Quick actions ─────────────────────────────────────────────────────────────
+async function quickAction(type) {
+  if (type === 'digest')    { showSection('ops');  return; }
+  if (type === 'health')    { showSection('asi');  loadASIStatus(); return; }
+  if (type === 'analytics') { showSection('campaigns'); loadAnalytics(); return; }
+  if (type === 'schedule')  { showSection('ops'); loadSchedule(); return; }
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+checkHealth();
+setInterval(checkHealth, 30000);
+</script>
+</body>
+</html>

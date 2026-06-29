@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lead Intelligence Feed | NEURAL SALES</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#e3000f", // Standardized Red
+                        "on-primary": "#ffffff",
+                        "primary-container": "#e3000f",
+                        "on-primary-container": "#ffffff",
+                        "background": "#000000", // Solid Black
+                        "surface": "#0a0a0a",
+                        "surface-container": "#111111",
+                        "surface-container-high": "#1a1a1a",
+                        "surface-container-highest": "#222222",
+                        "outline": "#333333",
+                        "outline-variant": "#222222",
+                        "on-surface": "#ffffff",
+                        "on-surface-variant": "#a1a1a1",
+                        "secondary": "#a1a1a1",
+                        "on-background": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px", // Sharp industrial look
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "gutter": "20px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "xl": "40px",
+                        "margin": "32px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Geist"],
+                        "body-sm": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "data-mono": ["JetBrains Mono"],
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-lg": ["Geist"],
+                        "headline-xl": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "data-mono": ["14px", {"lineHeight": "1.0", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #000000; color: #ffffff; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .inner-glow-focus:focus-within {
+            box-shadow: 0px 0px 10px rgba(227, 0, 15, 0.3);
+            border-color: #e3000f;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #000000; }
+        ::-webkit-scrollbar-thumb { background: #333333; }
+        ::-webkit-scrollbar-thumb:hover { background: #e3000f; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .header-stripe {
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(227, 0, 15, 0.05) 10px, rgba(227, 0, 15, 0.05) 20px);
+        }
+    </style>
+</head>
+<body class="font-body-lg overflow-hidden bg-black text-white">
+<div class="flex h-screen w-full">
+<!-- Sidebar Navigation -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 bg-black border-r border-white/10 flex flex-col py-lg px-md z-50">
+<div class="mb-xl px-sm">
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tighter text-white">NEURAL SALES</h1>
+<p class="font-label-caps text-label-caps text-primary">AI COMMAND CENTER</p>
+</div>
+<nav class="flex-1 space-y-sm">
+<a class="flex items-center gap-md px-md py-sm transition-all text-secondary hover:bg-white/5 hover:text-white" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-all text-white bg-primary/10 border-l-2 border-primary font-bold" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-caps text-label-caps">Intelligence</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-all text-secondary hover:bg-white/5 hover:text-white" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="font-label-caps text-label-caps">Pipeline</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-all text-secondary hover:bg-white/5 hover:text-white" href="#">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-label-caps text-label-caps">Campaigns</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-all text-secondary hover:bg-white/5 hover:text-white" href="#">
+<span class="material-symbols-outlined" data-icon="group_add">group_add</span>
+<span class="font-label-caps text-label-caps">Lead Bank</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-all text-secondary hover:bg-white/5 hover:text-white" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-sm">
+<button class="w-full bg-primary text-white py-md px-lg font-label-caps text-label-caps font-black flex items-center justify-center gap-sm hover:brightness-110 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                New Deployment
+            </button>
+<div class="pt-lg border-t border-white/5">
+<a class="flex items-center gap-md px-md py-sm transition-all text-secondary hover:text-white" href="#">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-all text-secondary hover:text-white" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-label-caps text-label-caps">Terminal</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col bg-black relative overflow-hidden">
+<!-- Top App Bar (Forge OS Style) -->
+<header class="h-14 flex justify-between items-center px-lg bg-black border-b border-white/10 z-40">
+<div class="flex items-center gap-xl h-full">
+<div class="flex items-center gap-md h-full">
+<span class="font-label-caps text-label-caps font-black text-white px-md bg-white/5 h-full flex items-center">SALES_CMD</span>
+<div class="flex items-center gap-sm font-data-mono text-xs text-primary bg-primary/10 px-md h-full border-x border-white/5">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        LIVE_FEED
+                    </div>
+</div>
+<div class="hidden lg:flex gap-lg items-center h-full">
+<span class="font-data-mono text-xs text-secondary">SESSION: <span class="text-white">04:12:45</span></span>
+<span class="font-data-mono text-xs text-secondary">REVENUE: <span class="text-white">$1.2M</span></span>
+<span class="font-data-mono text-xs text-primary bg-primary/5 px-sm py-xs border border-primary/20">FORGE_OS: DAY 1</span>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex gap-xs">
+<button class="font-label-caps text-[10px] text-white px-md py-sm border border-white/10 hover:bg-white/5 transition-all">CAMPAIGN+</button>
+<button class="font-label-caps text-[10px] bg-primary text-white px-md py-sm hover:brightness-110 transition-all">LEAD+</button>
+</div>
+<div class="flex items-center gap-md text-secondary border-l border-white/10 pl-lg">
+<span class="material-symbols-outlined cursor-pointer hover:text-white text-[20px]" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-white text-[20px]" data-icon="history">history</span>
+<div class="w-7 h-7 overflow-hidden border border-primary/40 grayscale hover:grayscale-0 transition-all">
+<img alt="Agency Director Avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy2cqs_rHZ3tsqSwPp_ShRIuTu5R4LoRBDZi2mJaW0qHnyPyiIhFp4fGc7IVp9Qi67nvvOkPe34bLxN6aDx_ZvQHDiDG0Bj_xqtDacIsf8iVC9UFGfgPAiQoQGnFJuwOi_Lg0s9FezjRV4lKjOMS9kPqvzndfnx1LiomnjEIg3mRNZUm2Y4Ld5JN5ts2Xx6mbGSYqLROb4Dzgi9xf8yYOXJDblXCw-aVVGSmRf9a5FjFAlQyG5pKbD15LzZCTWvcyfwdvWg_2TS20"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Data Feed Content -->
+<section class="flex-1 p-lg overflow-y-auto">
+<div class="max-w-[1400px] mx-auto">
+<div class="flex justify-between items-start mb-lg border-b border-white/5 pb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg font-bold tracking-tighter text-white uppercase italic">Lead Intelligence Feed</h2>
+<p class="text-secondary font-body-sm mt-1">Real-time neural lead scoring and pipeline prioritization.</p>
+</div>
+<div class="flex gap-md">
+<button class="flex items-center gap-sm font-label-caps text-label-caps border border-white/10 px-md py-sm hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="upload">upload</span>
+                                IMPORT
+                            </button>
+<button class="flex items-center gap-sm font-label-caps text-label-caps border border-white/10 px-md py-sm hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="file_download">file_download</span>
+                                EXPORT
+                            </button>
+</div>
+</div>
+<!-- Stats Strip (Standardized Bento) -->
+<div class="grid grid-cols-4 gap-md mb-xl">
+<div class="glass-card p-lg h-32 flex flex-col justify-between">
+<span class="font-label-caps text-[10px] text-secondary">HIGH INTENT LEADS</span>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-lg text-white">124</span>
+<span class="font-data-mono text-xs text-primary">+12%</span>
+</div>
+</div>
+<div class="glass-card p-lg h-32 flex flex-col justify-between">
+<span class="font-label-caps text-[10px] text-secondary">AVG. LEAD SCORE</span>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-lg text-white">4.2</span>
+<span class="font-data-mono text-xs text-secondary">/ 5.0</span>
+</div>
+</div>
+<div class="glass-card p-lg h-32 flex flex-col justify-between">
+<span class="font-label-caps text-[10px] text-secondary">ACTIVE VERTICALS</span>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-md text-white uppercase">Fintech</span>
+<span class="font-data-mono text-xs text-primary">LEAD</span>
+</div>
+</div>
+<div class="glass-card p-lg h-32 flex flex-col justify-between">
+<span class="font-label-caps text-[10px] text-secondary">PIPELINE VALUE</span>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-lg text-primary">$4.8M</span>
+<span class="font-data-mono text-xs text-white/50">EST.</span>
+</div>
+</div>
+</div>
+<!-- Master Lead Table -->
+<div class="border border-white/10 overflow-hidden bg-white/[0.02]">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-white/10 bg-white/5">
+<th class="px-lg py-md font-label-caps text-[11px] text-secondary">NAME / ID</th>
+<th class="px-lg py-md font-label-caps text-[11px] text-secondary">COMPANY</th>
+<th class="px-lg py-md font-label-caps text-[11px] text-secondary">VERTICAL</th>
+<th class="px-lg py-md font-label-caps text-[11px] text-secondary">STATUS</th>
+<th class="px-lg py-md font-label-caps text-[11px] text-secondary text-center">NEURAL SCORE</th>
+<th class="px-lg py-md font-label-caps text-[11px] text-secondary">NEXT ACTION</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<!-- Row 1 -->
+<tr class="hover:bg-white/5 transition-all group cursor-pointer h-20">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 border border-primary/30 flex items-center justify-center text-primary font-data-mono text-sm bg-primary/5">AJ</div>
+<div class="flex flex-col">
+<span class="font-bold text-white uppercase text-sm tracking-wide">Alex Jensen</span>
+<span class="text-[10px] font-data-mono text-secondary">alex.j@finnova.io</span>
+</div>
+</div>
+</td>
+<td class="px-lg py-md text-sm text-white font-medium uppercase">Finnova Solutions</td>
+<td class="px-lg py-md">
+<span class="text-[10px] font-label-caps border border-primary text-primary px-sm py-1">FINTECH</span>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-xs font-label-caps text-white">HOT LEAD</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex justify-center gap-1">
+<div class="w-4 h-2 bg-primary"></div>
+<div class="w-4 h-2 bg-primary"></div>
+<div class="w-4 h-2 bg-primary"></div>
+<div class="w-4 h-2 bg-primary"></div>
+<div class="w-4 h-2 bg-primary"></div>
+</div>
+</td>
+<td class="px-lg py-md text-xs font-data-mono text-secondary uppercase italic">Scheduled Neural Demo</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-white/5 transition-all group cursor-pointer h-20">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 border border-white/20 flex items-center justify-center text-white font-data-mono text-sm bg-white/5">SM</div>
+<div class="flex flex-col">
+<span class="font-bold text-white uppercase text-sm tracking-wide">Sarah Miller</span>
+<span class="text-[10px] font-data-mono text-secondary">s.miller@estategroup.com</span>
+</div>
+</div>
+</td>
+<td class="px-lg py-md text-sm text-white font-medium uppercase">Estate Capital Group</td>
+<td class="px-lg py-md">
+<span class="text-[10px] font-label-caps border border-white/20 text-secondary px-sm py-1">REAL ESTATE</span>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-white/40"></div>
+<span class="text-xs font-label-caps text-white/60 uppercase">Evaluating</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex justify-center gap-1">
+<div class="w-4 h-2 bg-primary"></div>
+<div class="w-4 h-2 bg-primary"></div>
+<div class="w-4 h-2 bg-primary"></div>
+<div class="w-4 h-2 bg-white/10"></div>
+<div class="w-4 h-2 bg-white/10"></div>
+</div>
+</td>
+<td class="px-lg py-md text-xs font-data-mono text-secondary uppercase italic">Email Content Analysis</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-white/5 transition-all group cursor-pointer h-20">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 border border-white/20 flex items-center justify-center text-white font-data-mono text-sm bg-white/5">RK</div>
+<div class="flex flex-col">
+<span class="font-bold text-white uppercase text-sm tracking-wide">Robert Kane</span>
+<span class="text-[10px] font-data-mono text-secondary">rkane@kanelaw.firm</span>
+</div>
+</div>
+</td>
+<td class="px-lg py-md text-sm text-white font-medium uppercase">Kane &amp; Associates</td>
+<td class="px-lg py-md">
+<span class="text-[10px] font-label-caps border border-white/20 text-secondary px-sm py-1">LEGAL</span>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-white/10"></div>
+<span class="text-xs font-label-caps text-white/30 uppercase">Stale</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex justify-center gap-1">
+<div class="w-4 h-2 bg-primary"></div>
+<div class="w-4 h-2 bg-white/10"></div>
+<div class="w-4 h-2 bg-white/10"></div>
+<div class="w-4 h-2 bg-white/10"></div>
+<div class="w-4 h-2 bg-white/10"></div>
+</div>
+</td>
+<td class="px-lg py-md text-xs font-data-mono text-secondary uppercase italic">Re-engagement Sequence</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-lg py-md border-t border-white/10 flex justify-between items-center bg-black">
+<span class="font-data-mono text-[10px] text-secondary uppercase">Showing 1-25 of 1,248 Neural Matches</span>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-secondary hover:text-white disabled:opacity-30" data-icon="chevron_left">chevron_left</button>
+<div class="flex gap-xs">
+<span class="w-8 h-8 flex items-center justify-center bg-primary text-white font-data-mono text-xs cursor-pointer">01</span>
+<span class="w-8 h-8 flex items-center justify-center text-secondary font-data-mono text-xs hover:bg-white/5 cursor-pointer">02</span>
+<span class="w-8 h-8 flex items-center justify-center text-secondary font-data-mono text-xs hover:bg-white/5 cursor-pointer">03</span>
+</div>
+<button class="material-symbols-outlined text-secondary hover:text-white" data-icon="chevron_right">chevron_right</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Intelligence Sidebar (Standardized Alignment) -->
+<aside class="w-[320px] bg-black border-l border-white/10 p-lg flex flex-col gap-xl">
+<div class="pt-2">
+<h3 class="font-label-caps text-label-caps text-primary mb-md flex items-center gap-sm">
+<span class="w-1.5 h-1.5 bg-primary"></span>
+                        NEURAL_FILTERS
+                    </h3>
+<div class="space-y-md">
+<div class="inner-glow-focus relative">
+<input class="w-full bg-white/5 border border-white/10 px-md py-sm pl-10 text-sm font-data-mono focus:outline-none placeholder:text-white/20" placeholder="SEARCH_PARAM..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[16px]" data-icon="search">search</span>
+</div>
+<div class="space-y-sm">
+<label class="font-label-caps text-[10px] text-secondary">VERTICAL_SELECT</label>
+<div class="grid grid-cols-2 gap-xs">
+<button class="px-sm py-md border border-primary text-primary text-[10px] font-label-caps bg-primary/5">FINTECH</button>
+<button class="px-sm py-md border border-white/10 text-secondary text-[10px] font-label-caps hover:bg-white/5">REAL_ESTATE</button>
+<button class="px-sm py-md border border-white/10 text-secondary text-[10px] font-label-caps hover:bg-white/5">LEGAL</button>
+<button class="px-sm py-md border border-white/10 text-secondary text-[10px] font-label-caps hover:bg-white/5">HEALTHCARE</button>
+</div>
+</div>
+<div class="space-y-sm pt-4">
+<label class="font-label-caps text-[10px] text-secondary">MIN_SCORE_THRESHOLD</label>
+<input class="w-full accent-primary bg-white/10 h-1 appearance-none" type="range"/>
+<div class="flex justify-between font-data-mono text-[9px] text-secondary">
+<span>1.0</span>
+<span>3.0</span>
+<span>5.0</span>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-label-caps text-label-caps text-primary mb-md flex items-center gap-sm">
+<span class="w-1.5 h-1.5 bg-primary"></span>
+                        PRIORITY_WEIGHTING
+                    </h3>
+<div class="glass-card p-lg space-y-md">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-label-caps text-white uppercase">AI Relevance</span>
+<span class="text-xs font-data-mono text-primary">85%</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 relative overflow-hidden">
+<div class="absolute inset-y-0 left-0 bg-primary w-[85%]"></div>
+</div>
+<p class="text-[10px] font-data-mono text-secondary leading-relaxed uppercase opacity-70">
+                            "MODELS_PRIORITIZING: HIGH_TICKET_FINNOVA_ENTITIES_REVENUE_CYCLES"
+                        </p>
+</div>
+</div>
+<div class="mt-auto">
+<button class="w-full py-md border border-white/10 text-secondary font-label-caps text-[11px] hover:text-white hover:bg-white/5 transition-all">RESET_ALL_FILTERS</button>
+</div>
+</aside>
+</div>
+</main>
+</div>
+<script>
+    document.querySelectorAll('tr').forEach(row => {
+        row.addEventListener('mousedown', () => {
+            row.style.backgroundColor = 'rgba(255,255,255,0.08)';
+        });
+        row.addEventListener('mouseup', () => {
+            row.style.backgroundColor = '';
+        });
+    });
+</script>
+</body></html>

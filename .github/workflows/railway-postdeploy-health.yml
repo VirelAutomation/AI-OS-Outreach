@@ -1,0 +1,30 @@
+name: Railway Postdeploy Health
+
+on:
+  deployment_status:
+
+jobs:
+  verify-health:
+    if: ${{ github.event.deployment_status.state == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Resolve deployment URL
+        id: target
+        shell: bash
+        run: |
+          url='${{ github.event.deployment_status.environment_url }}'
+          if [ -z "$url" ] || [ "$url" = "null" ]; then
+            url='${{ github.event.deployment_status.target_url }}'
+          fi
+          if [ -z "$url" ] || [ "$url" = "null" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "url=${url%/}" >> "$GITHUB_OUTPUT"
+
+      - name: Probe backend health endpoint
+        if: ${{ steps.target.outputs.skip != 'true' }}
+        run: |
+          curl --fail --retry 5 --retry-delay 10 --retry-all-errors \
+            "${{ steps.target.outputs.url }}/health/"

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEURAL SALES | COMMAND CENTER</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0a0a0a;
+            color: #e5e2e1;
+            font-family: 'Geist', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(227, 0, 15, 0.3);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .inner-glow-red:focus-within {
+            box-shadow: inset 0 0 10px rgba(227, 0, 15, 0.1), 0 0 15px rgba(227, 0, 15, 0.1);
+            border-color: #e3000f !important;
+        }
+        .heatmap-cell {
+            aspect-ratio: 1 / 1;
+            border-radius: 1px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #353534; border-radius: 0px; }
+        ::-webkit-scrollbar-thumb:hover { background: #e3000f; }
+
+        @keyframes pulse-red {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .live-indicator {
+            animation: pulse-red 2s infinite;
+        }
+        
+        /* Standardized Forge OS Inputs */
+        input, select, textarea {
+            background: #0e0e0e !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: #e5e2e1 !important;
+            border-radius: 0.125rem !important;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #e3000f !important;
+            outline: none !important;
+            ring: 0 !important;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "surface-container-highest": "#353534",
+                "inverse-primary": "#c0000b",
+                "surface-tint": "#e3000f",
+                "secondary-fixed": "#ffffff",
+                "inverse-surface": "#e5e2e1",
+                "primary-container": "#e3000f",
+                "primary": "#ffffff",
+                "outline": "#444444",
+                "surface-dim": "#0a0a0a",
+                "on-tertiary-container": "#ffffff",
+                "tertiary-fixed": "#ffffff",
+                "secondary": "#ffffff",
+                "on-primary-fixed-variant": "#e3000f",
+                "on-surface": "#ffffff",
+                "on-tertiary-fixed-variant": "#ffffff",
+                "surface-container-lowest": "#000000",
+                "on-error": "#ffffff",
+                "on-secondary-container": "#ffffff",
+                "surface-container-high": "#1a1a1a",
+                "error-container": "#e3000f",
+                "surface-variant": "#1a1a1a",
+                "tertiary": "#ffffff",
+                "on-surface-variant": "#ffffff",
+                "tertiary-container": "#1a1a1a",
+                "surface-container-low": "#0e0e0e",
+                "on-secondary": "#000000",
+                "on-primary-fixed": "#000000",
+                "on-secondary-fixed": "#000000",
+                "error": "#e3000f",
+                "secondary-fixed-dim": "#ffffff",
+                "on-primary": "#ffffff",
+                "primary-fixed": "#e3000f",
+                "on-primary-container": "#ffffff",
+                "surface-bright": "#1a1a1a",
+                "secondary-container": "#1a1a1a",
+                "surface": "#0a0a0a",
+                "on-tertiary-fixed": "#000000",
+                "background": "#0a0a0a",
+                "tertiary-fixed-dim": "#ffffff",
+                "outline-variant": "#333333",
+                "on-background": "#ffffff",
+                "on-tertiary": "#000000",
+                "surface-container": "#121212",
+                "primary-fixed-dim": "#e3000f",
+                "on-secondary-fixed-variant": "#ffffff",
+                "inverse-on-surface": "#000000",
+                "on-error-container": "#ffffff"
+              },
+              "borderRadius": {
+                "DEFAULT": "0px",
+                "lg": "2px",
+                "xl": "4px",
+                "full": "9999px"
+              },
+              "spacing": {
+                "base": "4px",
+                "gutter": "20px",
+                "md": "16px",
+                "xs": "4px",
+                "sm": "8px",
+                "lg": "24px",
+                "xl": "40px",
+                "margin": "32px"
+              },
+              "fontFamily": {
+                "body-lg": ["Geist"],
+                "body-sm": ["Geist"],
+                "headline-md": ["Geist"],
+                "data-mono": ["JetBrains Mono"],
+                "label-caps": ["JetBrains Mono"],
+                "headline-lg": ["Geist"],
+                "headline-xl": ["Geist"]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="flex min-h-screen bg-surface-dim selection:bg-primary-container selection:text-white">
+<!-- SIDE NAV BAR -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 bg-surface-dim border-r border-outline-variant/20 flex flex-col py-lg px-md hidden md:flex">
+<div class="mb-xl px-sm">
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tighter text-white">NEURAL <span class="text-primary-container">SALES</span></h1>
+<p class="font-label-caps text-[10px] tracking-[0.2em] text-white/40">AI COMMAND CENTER</p>
+</div>
+<nav class="flex-1 space-y-xs">
+<a class="flex items-center gap-md px-md py-sm text-white bg-primary-container font-bold transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-white/50 hover:bg-surface-container-highest hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-caps">Intelligence</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-white/50 hover:bg-surface-container-highest hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-caps">Pipeline</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-white/50 hover:bg-surface-container-highest hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">rocket_launch</span>
+<span class="font-label-caps">Campaigns</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-white/50 hover:bg-surface-container-highest hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">group_add</span>
+<span class="font-label-caps">Lead Bank</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-white/50 hover:bg-surface-container-highest hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-caps">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant/10">
+<button class="w-full bg-primary-container text-white py-md mb-lg font-bold font-label-caps tracking-widest hover:brightness-110 transition-all active:scale-95">
+                New Deployment
+            </button>
+<div class="space-y-sm">
+<a class="flex items-center gap-md px-md py-xs text-white/40 text-body-sm hover:text-white" href="#">
+<span class="material-symbols-outlined text-[18px]">support_agent</span>
+<span class="font-label-caps text-[10px]">Support</span>
+</a>
+<a class="flex items-center gap-md px-md py-xs text-white/40 text-body-sm hover:text-white" href="#">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+<span class="font-label-caps text-[10px]">Terminal</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TOP APP BAR -->
+<header class="sticky top-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10">
+<div class="flex justify-between items-center w-full px-lg py-sm max-w-[1600px] mx-auto">
+<div class="flex items-center gap-xl">
+<div class="flex items-center gap-md">
+<span class="font-label-caps font-black text-white">SALES COMMAND</span>
+<span class="bg-primary-container text-white px-sm py-[2px] font-label-caps text-[10px] font-bold">DAY 1</span>
+</div>
+<div class="hidden lg:flex items-center gap-lg">
+<div class="flex items-center gap-sm text-white/60 font-label-caps text-[10px]">
+<span class="w-2 h-2 rounded-full bg-primary-container live-indicator"></span>
+                            LIVE SESSION: 04:12:45
+                        </div>
+<div class="text-white/60 font-label-caps text-[10px] tracking-widest border-l border-outline-variant/20 pl-lg">
+                            REVENUE: <span class="text-primary-container">$1.2M</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm bg-black px-md py-xs border border-outline-variant/20">
+<span class="material-symbols-outlined text-[18px] opacity-40">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-data-mono text-xs w-48 placeholder:opacity-30 !border-none !bg-transparent" placeholder="QUERY NEURAL NET..." type="text"/>
+</div>
+<div class="flex gap-sm">
+<button class="p-xs hover:bg-surface-container text-white/50 hover:text-white transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-xs hover:bg-surface-container text-white/50 hover:text-white transition-all">
+<span class="material-symbols-outlined">history</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant/20 mx-sm"></div>
+<img alt="Director" class="w-8 h-8 rounded-none border border-primary-container/50 grayscale hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUorNRWAlHg9pFdbGIoqcUiZx2-cb6uYzedyt-Jh3KuKpCk_lhTXcOJykXL1iIly4yyJpoUpmX6SaMP0B5JU6W_-lRqD6A6etfNF_142GYPA0NcownplFuxjdC1k-RY6TOMDRFqOJ366u-mYE-YWS0t8NoWAz5QY85rB6GjF_mgh20l3x0uAkR4YNiEt1dT6qo9q4Gk57pzdmFfsi0yvMPESUt6cyatHY-EDeV7kv7K4RVOPAgelzGfmZrP7Tb7PUNL77eMpR6Ciw"/>
+</div>
+</div>
+</header>
+<!-- DASHBOARD CANVAS -->
+<div class="p-lg max-w-[1600px] mx-auto w-full space-y-lg">
+<!-- SECTION 1: CALL ANALYTICS & HEATMAP -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg items-stretch">
+<!-- Line Graph: Call Volume -->
+<div class="lg:col-span-2 glass-card p-lg flex flex-col">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<h2 class="font-label-caps text-white/40 text-[10px] mb-xs">DAILY CALL VOLUME</h2>
+<p class="font-headline-md text-white text-xl">4,281 <span class="text-primary-container text-body-sm font-data-mono ml-sm">+12.4%</span></p>
+</div>
+<div class="flex gap-xs">
+<button class="px-sm py-[2px] bg-primary-container text-white text-[10px] font-bold">24H</button>
+<button class="px-sm py-[2px] border border-outline-variant/30 text-white/40 text-[10px] hover:text-white transition-colors">7D</button>
+</div>
+</div>
+<!-- Mock Line Chart SVG -->
+<div class="flex-1 min-h-[220px] relative mt-auto">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 200">
+<defs>
+<lineargradient id="line-grad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#e3000f" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#e3000f" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,150 Q100,140 200,100 T400,120 T600,60 T800,80 T1000,40 V200 H0 Z" fill="url(#line-grad)"></path>
+<path d="M0,150 Q100,140 200,100 T400,120 T600,60 T800,80 T1000,40" fill="none" stroke="#e3000f" stroke-linecap="square" stroke-width="2"></path>
+</svg>
+<div class="flex justify-between font-data-mono text-[10px] text-white/20 pt-md border-t border-outline-variant/10">
+<span>00:00</span><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span>
+</div>
+</div>
+</div>
+<!-- Heatmap: Efficiency -->
+<div class="glass-card p-lg flex flex-col">
+<h2 class="font-label-caps text-white/40 text-[10px] mb-lg">EFFICIENCY HEATMAP</h2>
+<div class="grid grid-cols-7 gap-sm mb-auto">
+<script>
+    const segments = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    document.write(segments.map(s => `<div class="text-[10px] text-center font-data-mono text-white/20">${s}</div>`).join(''));
+    for(let i=0; i<42; i++) {
+        const op = Math.random();
+        document.write(`<div class="heatmap-cell" style="background: rgba(227, 0, 15, ${op > 0.3 ? op : 0.05})"></div>`);
+    }
+</script>
+</div>
+<div class="mt-lg flex justify-between items-center pt-md border-t border-outline-variant/10">
+<span class="text-[10px] font-data-mono text-white/20">LOW</span>
+<div class="flex gap-1">
+<div class="w-3 h-3 bg-primary-container/10"></div>
+<div class="w-3 h-3 bg-primary-container/40"></div>
+<div class="w-3 h-3 bg-primary-container/70"></div>
+<div class="w-3 h-3 bg-primary-container"></div>
+</div>
+<span class="text-[10px] font-data-mono text-white/20">PEAK</span>
+</div>
+</div>
+</div>
+<!-- SECTION 2: EMAIL & VELOCITY -->
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-lg items-stretch">
+<!-- Active Campaigns Table -->
+<div class="xl:col-span-3 glass-card flex flex-col">
+<div class="p-lg border-b border-outline-variant/10 flex justify-between items-center">
+<h2 class="font-label-caps text-white text-[12px] font-bold">ACTIVE EMAIL CAMPAIGNS</h2>
+<button class="text-primary-container font-label-caps text-[10px] font-bold flex items-center gap-xs hover:opacity-80 transition-opacity">
+                            VIEW FULL LOG <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-black/40 border-b border-outline-variant/10 font-label-caps text-[10px] text-white/40">
+<th class="px-lg py-md font-medium">CAMPAIGN</th>
+<th class="px-lg py-md font-medium">SENT</th>
+<th class="px-lg py-md font-medium">OPENS</th>
+<th class="px-lg py-md font-medium">REPLIES</th>
+<th class="px-lg py-md font-medium">MEETINGS</th>
+<th class="px-lg py-md text-right font-medium">TREND</th>
+</tr>
+</thead>
+<tbody class="text-body-sm font-data-mono">
+<tr class="border-b border-outline-variant/5 hover:bg-white/[0.02] transition-colors">
+<td class="px-lg py-md text-white font-bold font-body-sm">Q4 SaaS Outreach</td>
+<td class="px-lg py-md text-white/60">12,402</td>
+<td class="px-lg py-md text-white/60">42.1%</td>
+<td class="px-lg py-md text-primary-container font-bold">8.4%</td>
+<td class="px-lg py-md text-white font-bold">142</td>
+<td class="px-lg py-md text-right">
+<div class="inline-flex gap-[2px] h-4 items-end">
+<div class="w-1 bg-primary-container h-2"></div>
+<div class="w-1 bg-primary-container h-3"></div>
+<div class="w-1 bg-primary-container h-4"></div>
+<div class="w-1 bg-primary-container h-2"></div>
+</div>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/5 hover:bg-white/[0.02] transition-colors">
+<td class="px-lg py-md text-white font-bold font-body-sm">FinTech Reactivation</td>
+<td class="px-lg py-md text-white/60">8,110</td>
+<td class="px-lg py-md text-white/60">38.5%</td>
+<td class="px-lg py-md text-primary-container font-bold">6.2%</td>
+<td class="px-lg py-md text-white font-bold">88</td>
+<td class="px-lg py-md text-right">
+<div class="inline-flex gap-[2px] h-4 items-end">
+<div class="w-1 bg-white/10 h-4"></div>
+<div class="w-1 bg-white/10 h-2"></div>
+<div class="w-1 bg-primary-container h-3"></div>
+<div class="w-1 bg-primary-container h-4"></div>
+</div>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/5 hover:bg-white/[0.02] transition-colors">
+<td class="px-lg py-md text-white font-bold font-body-sm">Enterprise Cold-In</td>
+<td class="px-lg py-md text-white/60">24,800</td>
+<td class="px-lg py-md text-white/60">18.9%</td>
+<td class="px-lg py-md text-primary-container font-bold">2.1%</td>
+<td class="px-lg py-md text-white font-bold">34</td>
+<td class="px-lg py-md text-right">
+<div class="inline-flex gap-[2px] h-4 items-end">
+<div class="w-1 bg-primary-container h-2"></div>
+<div class="w-1 bg-white/10 h-2"></div>
+<div class="w-1 bg-white/10 h-1"></div>
+<div class="w-1 bg-white/10 h-2"></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Area Chart: Email Volume -->
+<div class="glass-card p-lg flex flex-col">
+<h2 class="font-label-caps text-white/40 text-[10px] mb-lg">OUTBOUND VELOCITY</h2>
+<div class="flex-1 flex items-end gap-[4px] h-32 mb-md">
+<div class="flex-1 bg-primary-container/10 border-t border-primary-container/30 h-[40%]"></div>
+<div class="flex-1 bg-primary-container/20 border-t border-primary-container/50 h-[65%]"></div>
+<div class="flex-1 bg-primary-container/30 border-t border-primary-container/70 h-[55%]"></div>
+<div class="flex-1 bg-primary-container/40 border-t border-primary-container/90 h-[85%]"></div>
+<div class="flex-1 bg-primary-container h-[95%] relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-black font-data-mono text-[10px] px-sm py-[2px] font-bold">78K</div>
+</div>
+</div>
+<div class="pt-md border-t border-outline-variant/10">
+<p class="text-white font-headline-md text-xl">78.4K <span class="text-white/30 text-body-sm font-data-mono">EMAILS/DAY</span></p>
+</div>
+</div>
+</div>
+<!-- SECTION 3: LOG FORM & QUEUE -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-lg items-stretch">
+<!-- Log Call Form -->
+<div class="glass-card p-lg flex flex-col">
+<div class="flex items-center gap-md mb-xl">
+<div class="p-sm bg-primary-container text-white">
+<span class="material-symbols-outlined text-white">add_call</span>
+</div>
+<h2 class="font-label-caps text-white text-[12px] font-bold">LOG DEPLOYMENT RESULT</h2>
+</div>
+<form class="space-y-lg flex-1 flex flex-col">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="space-y-base">
+<label class="font-label-caps text-[10px] text-white/40">LEAD ID / IDENTIFIER</label>
+<input class="w-full px-md py-sm text-data-mono text-sm inner-glow-red" type="text" value="NS-8821-X"/>
+</div>
+<div class="space-y-base">
+<label class="font-label-caps text-[10px] text-white/40">RESULT ARCHETYPE</label>
+<select class="w-full px-md py-sm text-sm appearance-none font-label-caps">
+<option>Discovery Meeting Booked</option>
+<option>Follow-up Required</option>
+<option>Hard Reject</option>
+<option>No Response</option>
+</select>
+</div>
+</div>
+<div class="space-y-base flex-1 flex flex-col">
+<label class="font-label-caps text-[10px] text-white/40">LOG TRANSCRIPT / NOTES</label>
+<textarea class="w-full flex-1 px-md py-sm text-sm min-h-[100px]" placeholder="Neural notes or call summary..."></textarea>
+</div>
+<div class="flex items-center gap-lg pt-lg mt-auto">
+<button class="flex-1 bg-primary-container text-white py-md font-bold font-label-caps tracking-widest hover:brightness-110 active:scale-95 transition-all" type="submit">
+                                SUBMIT LOG
+                            </button>
+<button class="flex-1 border border-outline-variant/30 text-white font-label-caps py-md hover:bg-white/5 transition-all" type="button">
+                                CANCEL
+                            </button>
+</div>
+</form>
+</div>
+<!-- Follow-up Queue -->
+<div class="glass-card flex flex-col h-full">
+<div class="p-lg border-b border-outline-variant/10 flex justify-between items-center">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">timer</span>
+<h2 class="font-label-caps text-white text-[12px] font-bold">FOLLOW-UP QUEUE</h2>
+</div>
+<span class="bg-primary-container/10 border border-primary-container/30 px-sm py-[2px] text-[10px] font-data-mono text-primary-container font-bold">12 PENDING</span>
+</div>
+<div class="flex-1 overflow-y-auto p-md space-y-xs">
+<!-- Queue Item 1 -->
+<div class="flex items-center gap-md p-md bg-white/[0.02] border-l-2 border-primary-container hover:bg-white/[0.05] transition-all cursor-pointer group">
+<div class="w-10 h-10 bg-black flex items-center justify-center font-bold text-primary-container border border-outline-variant/20 font-label-caps text-xs">JB</div>
+<div class="flex-1">
+<h4 class="text-body-sm font-bold text-white group-hover:text-primary-container transition-colors">Julian Black</h4>
+<p class="text-[10px] text-white/40 font-label-caps">Enterprise Lead @ Apex Corp</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-data-mono text-primary-container font-bold">02:15:00</p>
+<p class="text-[10px] text-white/20 font-label-caps">OVERDUE</p>
+</div>
+</div>
+<!-- Queue Item 2 -->
+<div class="flex items-center gap-md p-md bg-white/[0.02] border-l-2 border-white/10 hover:bg-white/[0.05] transition-all cursor-pointer group">
+<div class="w-10 h-10 bg-black flex items-center justify-center font-bold text-white/30 border border-outline-variant/20 font-label-caps text-xs">RS</div>
+<div class="flex-1">
+<h4 class="text-body-sm font-bold text-white group-hover:text-primary-container transition-colors">Ray Sterling</h4>
+<p class="text-[10px] text-white/40 font-label-caps">Head of Ops @ Volt</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-data-mono text-white/60">08:30:00</p>
+<p class="text-[10px] text-white/20 font-label-caps">T-MINUS</p>
+</div>
+</div>
+<!-- Queue Item 3 -->
+<div class="flex items-center gap-md p-md bg-white/[0.02] border-l-2 border-white/10 hover:bg-white/[0.05] transition-all cursor-pointer group">
+<div class="w-10 h-10 bg-black flex items-center justify-center font-bold text-white/30 border border-outline-variant/20 font-label-caps text-xs">MK</div>
+<div class="flex-1">
+<h4 class="text-body-sm font-bold text-white group-hover:text-primary-container transition-colors">Mina Kova</h4>
+<p class="text-[10px] text-white/40 font-label-caps">Founder @ Zenith AI</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-data-mono text-white/60">10:00:00</p>
+<p class="text-[10px] text-white/20 font-label-caps">T-MINUS</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- FOOTER / STAT BAR -->
+<footer class="mt-auto border-t border-outline-variant/10 py-sm px-lg bg-black">
+<div class="flex justify-between items-center max-w-[1600px] mx-auto text-[10px] font-data-mono text-white/30">
+<div class="flex gap-lg">
+<span class="flex items-center gap-xs">SYSTEM STATUS: <span class="text-primary-container font-bold">OPTIMAL</span></span>
+<span>LATENCY: 12ms</span>
+</div>
+<div class="flex gap-lg">
+<span>NEURAL SALES v2.4.0</span>
+<span class="text-white/10">© 2024 COMMANDER AI</span>
+</div>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interaction: Update "Live Session" timer
+        let seconds = 15165; 
+        const timerElement = document.querySelector('div.flex.items-center.gap-sm.text-white\\/60');
+        
+        setInterval(() => {
+            seconds++;
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            const formatted = `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            if(timerElement) {
+                timerElement.innerHTML = `<span class="w-2 h-2 rounded-full bg-primary-container live-indicator"></span> LIVE SESSION: ${formatted}`;
+            }
+        }, 1000);
+
+        // Hover effects for heatmap
+        document.querySelectorAll('.heatmap-cell').forEach(cell => {
+            cell.addEventListener('mouseover', () => {
+                cell.style.boxShadow = '0 0 10px #e3000f';
+                cell.style.zIndex = '10';
+                cell.style.transform = 'scale(1.2)';
+            });
+            cell.addEventListener('mouseout', () => {
+                cell.style.boxShadow = 'none';
+                cell.style.zIndex = '0';
+                cell.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

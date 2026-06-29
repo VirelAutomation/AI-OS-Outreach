@@ -1,0 +1,11 @@
+{"ts":"2026-06-01T09:33:11.247Z","actor":"noah","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:429_noah","metadata":{}}
+{"ts":"2026-06-01T09:34:10.257Z","actor":"noah","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:unknown","metadata":{}}
+{"ts":"2026-06-01T09:36:29.818Z","actor":"noah","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:429_noah","metadata":{}}
+{"ts":"2026-06-05T09:48:40.167Z","actor":"jarvis","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:429_jarvis","metadata":{}}
+{"ts":"2026-06-05T09:52:13.973Z","actor":"jarvis","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:429_jarvis","metadata":{}}
+{"ts":"2026-06-05T09:53:14.925Z","actor":"noah","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:429_noah","metadata":{}}
+{"ts":"2026-06-05T09:54:14.423Z","actor":"jarvis","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:429_jarvis","metadata":{}}
+{"ts":"2026-06-05T09:56:14.887Z","actor":"jarvis","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:429_jarvis","metadata":{}}
+{"ts":"2026-06-05T10:01:24.082Z","actor":"jarvis","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:429_jarvis","metadata":{}}
+{"ts":"2026-06-05T10:01:24.085Z","actor":"jarvis","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:unknown","metadata":{}}
+{"ts":"2026-06-05T10:06:19.304Z","actor":"jarvis","action":"gemini_execute","purpose":"llm_generation","result":"error","detail":"[redacted]:429_jarvis","metadata":{}}

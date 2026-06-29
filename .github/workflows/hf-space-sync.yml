@@ -1,0 +1,28 @@
+name: Sync HF Space
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'forge_system/hf_space/**'
+      - '.github/workflows/hf-space-sync.yml'
+  workflow_dispatch:
+
+jobs:
+  sync-space:
+    if: ${{ secrets.HF_TOKEN != '' && secrets.HF_SPACE_REPO_ID != '' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Sync Space to Hugging Face
+        uses: huggingface/hub-sync@v0.1.0
+        with:
+          github_repo_id: ${{ github.repository }}
+          huggingface_repo_id: ${{ secrets.HF_SPACE_REPO_ID }}
+          hf_token: ${{ secrets.HF_TOKEN }}
+          repo_type: space
+          space_sdk: gradio
+          subdirectory: forge_system/hf_space

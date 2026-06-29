@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FORGE OS | JARVIS INTERFACE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @keyframes oscillate {
+            0%, 100% { transform: scaleY(0.5); opacity: 0.3; }
+            50% { transform: scaleY(1.2); opacity: 1; }
+        }
+        .wave-bar {
+            animation: oscillate 1.5s ease-in-out infinite;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .jarvis-glow {
+            text-shadow: 0 0 15px rgba(227, 0, 15, 0.6);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(227, 0, 15, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "surface": "#131313",
+                    "primary": "#ffb4aa",
+                    "secondary-container": "#454747",
+                    "primary-container": "#e3000f",
+                    "primary-fixed-dim": "#ffb4aa",
+                    "surface-variant": "#353534",
+                    "surface-dim": "#131313",
+                    "secondary": "#c6c6c7",
+                    "on-tertiary-container": "#f8f5f4",
+                    "inverse-on-surface": "#313030",
+                    "outline-variant": "#5e3f3a",
+                    "on-primary-fixed-variant": "#930006",
+                    "error-container": "#93000a",
+                    "on-primary-container": "#fff4f2",
+                    "tertiary-container": "#717070",
+                    "surface-container-highest": "#353534",
+                    "secondary-fixed": "#e2e2e2",
+                    "on-secondary-container": "#b4b5b5",
+                    "on-secondary": "#2f3131",
+                    "on-tertiary": "#303030",
+                    "on-tertiary-fixed": "#1b1c1c",
+                    "surface-container": "#201f1f",
+                    "on-surface-variant": "#e9bcb6",
+                    "error": "#ffb4ab",
+                    "inverse-surface": "#e5e2e1",
+                    "tertiary-fixed": "#e4e2e1",
+                    "tertiary": "#c8c6c5",
+                    "on-error": "#690005",
+                    "on-background": "#e5e2e1",
+                    "surface-container-low": "#1c1b1b",
+                    "on-surface": "#e5e2e1",
+                    "outline": "#af8782",
+                    "primary-fixed": "#ffdad5",
+                    "on-error-container": "#ffdad6",
+                    "inverse-primary": "#c0000b",
+                    "background": "#131313",
+                    "surface-tint": "#ffb4aa",
+                    "on-secondary-fixed-variant": "#454747",
+                    "on-primary": "#690003",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-bright": "#3a3939",
+                    "on-tertiary-fixed-variant": "#474746",
+                    "surface-container-high": "#2a2a2a",
+                    "on-primary-fixed": "#410001"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xl": "40px",
+                    "lg": "24px",
+                    "gutter": "20px",
+                    "xs": "4px",
+                    "base": "4px",
+                    "sm": "8px",
+                    "md": "16px",
+                    "margin": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Geist"],
+                    "headline-md": ["Geist"],
+                    "label-caps": ["JetBrains Mono"],
+                    "headline-lg": ["Geist"],
+                    "body-sm": ["Geist"],
+                    "data-mono": ["JetBrains Mono"],
+                    "headline-xl": ["Geist"],
+                    "headline-lg-mobile": ["Geist"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "data-mono": ["14px", {"lineHeight": "1.0", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg overflow-hidden h-screen flex">
+<!-- Sidebar Navigation (Mandatory Mapping) -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 border-r border-outline-variant/20 bg-surface-dim flex flex-col h-full py-lg px-md hidden md:flex shrink-0">
+<div class="mb-xl">
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tighter text-primary">NEURAL SALES</h1>
+<p class="font-label-caps text-[10px] tracking-[0.2em] opacity-50">AI COMMAND CENTER</p>
+</div>
+<nav class="flex-1 space-y-base">
+<a class="flex items-center gap-md p-md text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps">Dashboard</span>
+</a>
+<!-- Active State Logic: JARVIS (Intelligence) -->
+<a class="flex items-center gap-md p-md text-on-primary-container bg-primary-container/20 border-l-4 border-primary font-bold scale-[0.98] transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="psychology" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-label-caps">Intelligence</span>
+</a>
+<a class="flex items-center gap-md p-md text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="font-label-caps">Pipeline</span>
+</a>
+<a class="flex items-center gap-md p-md text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-label-caps">Campaigns</span>
+</a>
+<a class="flex items-center gap-md p-md text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group_add">group_add</span>
+<span class="font-label-caps">Lead Bank</span>
+</a>
+<a class="flex items-center gap-md p-md text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-caps">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/10 pt-lg space-y-base">
+<button class="w-full py-md px-lg bg-primary-container text-white font-label-caps font-bold hover:brightness-110 transition-all mb-md">
+                New Deployment
+            </button>
+<div class="flex items-center gap-md p-md text-secondary opacity-70 font-label-caps">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span>Support</span>
+</div>
+<div class="flex items-center gap-md p-md text-secondary opacity-70 font-label-caps">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span>Terminal</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-screen relative bg-surface-container-lowest">
+<!-- Top Bar (Contextual) -->
+<header class="flex justify-between items-center w-full px-lg py-sm z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10">
+<div class="flex items-center gap-xl">
+<div class="font-label-caps font-black text-primary">SALES COMMAND</div>
+<div class="flex gap-md">
+<span class="text-on-surface-variant font-label-caps opacity-80">LIVE SESSION: 04:12:45</span>
+<span class="text-primary font-label-caps">REVENUE: $1.2M</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs bg-primary-container/10 border border-primary/20 px-md py-xs rounded-sm">
+<span class="font-label-caps text-primary text-[10px]">DAY 1</span>
+</div>
+<div class="flex gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="history">history</span>
+<img alt="Agency Director Avatar" class="w-8 h-8 rounded-full border border-primary/30" data-alt="Close-up professional portrait of a tech agency director with sharp facial features and intense gaze, set against a dark, futuristic background with subtle red ambient lighting and glass reflection elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP6PwLXuHeYm8sTIg0usahED-Ae_wHJ_FTm1unvLabQ3IpWuY5ol7IDKMT43ZecKFkXLbYNoV7-TDlV2T5DwIXIVtVINOFHMjlkqbFbmGGb_Mib5hIaq08_ZIES6So-UAexg0BzpOuE6xO_ImrWzyYXlFaTZ_7VFfvs3809-rbDDijN3eEqjGJKYz3d7sQFQPqBVb3v0yQtUWh_lgJORlqSmUg18eb_xRQo-mb-DUBI2qMnOzl3HLf6p1m0-B_ij4vE87JiqgoYHk"/>
+</div>
+</div>
+</header>
+<!-- Jarvis Immersive Interface -->
+<div class="flex-1 overflow-hidden flex flex-col relative">
+<!-- Animated Waveform Header -->
+<div class="flex flex-col items-center pt-xl pb-md">
+<div class="flex items-center justify-center gap-[2px] h-12 mb-md">
+<!-- Sine Wave Layer Simulation -->
+<div class="wave-bar w-[3px] bg-primary-container h-4" style="animation-delay: 0.1s"></div>
+<div class="wave-bar w-[3px] bg-primary-container h-8" style="animation-delay: 0.2s"></div>
+<div class="wave-bar w-[3px] bg-primary-container h-12" style="animation-delay: 0.3s"></div>
+<div class="wave-bar w-[3px] bg-primary-container h-10" style="animation-delay: 0.4s"></div>
+<div class="wave-bar w-[3px] bg-primary-container h-6" style="animation-delay: 0.5s"></div>
+<div class="wave-bar w-[3px] bg-primary-container h-12" style="animation-delay: 0.6s"></div>
+<div class="wave-bar w-[3px] bg-primary-container h-4" style="animation-delay: 0.7s"></div>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-white jarvis-glow tracking-widest font-black">JARVIS</h2>
+</div>
+<!-- Chat Thread Area -->
+<div class="flex-1 overflow-y-auto px-xl py-lg space-y-lg custom-scrollbar">
+<!-- Jarvis Message -->
+<div class="flex flex-col items-start max-w-2xl">
+<div class="glass-card border-l-4 border-primary-container p-md rounded-tr-lg rounded-br-lg">
+<p class="font-label-caps text-primary mb-xs">JARVIS • 09:00:01</p>
+<p class="font-body-lg text-on-surface">Systems online, Jace. Virell Labs node synchronized. Forge OS is processing target milestones for the $15M MRR offensive. Would you like a situation report on the current deployment cycle?</p>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end w-full">
+<div class="bg-primary-container/20 border border-primary-container/40 p-md rounded-tl-lg rounded-bl-lg max-w-lg">
+<p class="font-label-caps text-on-surface-variant mb-xs">JACE (OPERATOR)</p>
+<p class="font-body-lg text-white">Proceed with Morning Briefing. Focus on Aikiaa Ops Forge pipeline velocity. Are we on track for the 7-month target?</p>
+</div>
+</div>
+<!-- Jarvis Message -->
+<div class="flex flex-col items-start max-w-2xl">
+<div class="glass-card border-l-4 border-primary-container p-md rounded-tr-lg rounded-br-lg">
+<p class="font-label-caps text-primary mb-xs">JARVIS • 09:04:22</p>
+<div class="space-y-md">
+<p class="font-body-lg text-on-surface">Briefing Initiated. Analysis shows a 14% deviation in lead scoring accuracy which is being auto-corrected. Pipeline velocity is currently at 1.4x baseline. To reach $15M MRR, we need to deploy 3 additional automated sequence nodes by EOD.</p>
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-surface-container p-sm border border-outline-variant/10">
+<p class="font-label-caps text-[10px] opacity-50">CURR. REVENUE</p>
+<p class="font-data-mono text-primary">$1.24M</p>
+</div>
+<div class="bg-surface-container p-sm border border-outline-variant/10">
+<p class="font-label-caps text-[10px] opacity-50">PROJ. REVENUE</p>
+<p class="font-data-mono text-primary">$15.02M</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="dynamic-chat-anchor"></div>
+</div>
+<!-- Input Controls -->
+<div class="p-xl bg-gradient-to-t from-background to-transparent pt-xl">
+<div class="max-w-4xl mx-auto flex flex-col gap-md">
+<button class="self-start flex items-center gap-sm px-lg py-xs bg-surface-container border border-outline-variant/30 text-white font-label-caps text-[11px] hover:border-primary-container transition-colors group">
+<span class="material-symbols-outlined text-[16px] text-primary group-hover:animate-pulse" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                        MORNING BRIEFING
+                    </button>
+<div class="relative flex items-center group">
+<div class="absolute left-md flex items-center text-on-surface-variant cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</div>
+<input class="w-full bg-black/40 border border-white/10 py-md pl-xl pr-[100px] text-on-background placeholder:text-on-surface-variant/30 focus:border-primary-container focus:ring-0 focus:outline-none transition-all font-body-lg" placeholder="Issue a command to JARVIS..." type="text"/>
+<div class="absolute right-md flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant/40 cursor-pointer hover:text-white" data-icon="attach_file">attach_file</span>
+<button class="bg-primary-container text-white px-md py-sm flex items-center justify-center hover:brightness-125 transition-all shadow-[0_0_15px_rgba(227,0,15,0.2)]">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Context Overlay (Right Detail Rail) -->
+<aside class="hidden xl:flex w-[320px] bg-surface-container-lowest border-l border-outline-variant/10 flex-col py-lg px-md gap-lg overflow-y-auto custom-scrollbar">
+<div>
+<p class="font-label-caps text-on-surface-variant text-[10px] mb-sm opacity-50">OPERATIONAL CONTEXT</p>
+<div class="glass-card p-md space-y-md">
+<div>
+<p class="font-label-caps text-[10px] text-primary">OPERATOR</p>
+<p class="font-headline-md text-white">Jace</p>
+</div>
+<div>
+<p class="font-label-caps text-[10px] text-primary">ENTITY</p>
+<p class="font-body-lg text-white">Virell Labs / Aikiaa Ops Forge</p>
+</div>
+<div>
+<p class="font-label-caps text-[10px] text-primary">STRATEGIC GOAL</p>
+<p class="font-body-lg text-white">$15M MRR <span class="text-on-surface-variant opacity-50">in 7 mo</span></p>
+</div>
+</div>
+</div>
+<div>
+<p class="font-label-caps text-on-surface-variant text-[10px] mb-sm opacity-50">ACTIVE AGENTS</p>
+<div class="space-y-sm">
+<div class="flex items-center gap-md p-sm bg-surface-container border-l-2 border-primary-container">
+<div class="w-8 h-8 flex items-center justify-center bg-primary-container/20">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div>
+<p class="font-label-caps text-[11px] text-white">JARVIS CORE</p>
+<p class="text-[9px] text-on-surface-variant">Optimal Performance</p>
+</div>
+</div>
+<div class="flex items-center gap-md p-sm bg-surface-container opacity-50">
+<div class="w-8 h-8 flex items-center justify-center bg-tertiary-container/20">
+<span class="material-symbols-outlined text-tertiary text-[18px]" data-icon="monitoring">monitoring</span>
+</div>
+<div>
+<p class="font-label-caps text-[11px] text-white">QUANTSCANNER</p>
+<p class="text-[9px] text-on-surface-variant">Standby</p>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto p-md border border-primary-container/20 bg-primary-container/5 rounded-sm">
+<div class="flex items-center justify-between mb-sm">
+<p class="font-label-caps text-[10px] text-primary">SYSTEM LOAD</p>
+<p class="font-data-mono text-[10px] text-primary">12.4%</p>
+</div>
+<div class="h-[2px] bg-white/10 w-full overflow-hidden">
+<div class="h-full bg-primary-container w-[12.4%]"></div>
+</div>
+</div>
+</aside>
+<script>
+        // Micro-interaction for input bar
+        const input = document.querySelector('input');
+        input.addEventListener('focus', () => {
+            input.parentElement.classList.add('shadow-[inset_0_0_10px_rgba(227,0,15,0.1)]');
+        });
+        input.addEventListener('blur', () => {
+            input.parentElement.classList.remove('shadow-[inset_0_0_10px_rgba(227,0,15,0.1)]');
+        });
+
+        // Simple terminal echo simulation
+        input.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter' && input.value.trim() !== '') {
+                const chatContainer = document.querySelector('.custom-scrollbar');
+                const userMsg = input.value;
+                input.value = '';
+
+                // Add User Message
+                const userDiv = document.createElement('div');
+                userDiv.className = 'flex flex-col items-end w-full animate-fade-in-up';
+                userDiv.innerHTML = `
+                    <div class="bg-primary-container/20 border border-primary-container/40 p-md rounded-tl-lg rounded-bl-lg max-w-lg">
+                        <p class="font-label-caps text-on-surface-variant mb-xs">JACE (OPERATOR)</p>
+                        <p class="font-body-lg text-white">${userMsg}</p>
+                    </div>
+                `;
+                chatContainer.appendChild(userDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                // Simulate Jarvis typing
+                setTimeout(() => {
+                    const jarvisDiv = document.createElement('div');
+                    jarvisDiv.className = 'flex flex-col items-start max-w-2xl animate-fade-in-up';
+                    jarvisDiv.innerHTML = `
+                        <div class="glass-card border-l-4 border-primary-container p-md rounded-tr-lg rounded-br-lg">
+                            <p class="font-label-caps text-primary mb-xs">JARVIS • ${new Date().toLocaleTimeString()}</p>
+                            <p class="font-body-lg text-on-surface">Acknowledged, Jace. Command logged. Adjusting parameters for neural deployment... Querying the Lead Bank for optimized conversion paths.</p>
+                        </div>
+                    `;
+                    chatContainer.appendChild(jarvisDiv);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 1000);
+            }
+        });
+    </script>
+</body></html>

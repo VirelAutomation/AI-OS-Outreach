@@ -1,0 +1,43 @@
+﻿# Secrets and local env
+.env
+.env.*
+!**/.env.example
+credentials/
+client_secret_*.json
+gen-lang-client-*.json
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.db
+*.sqlite3
+*.log
+
+# Node / frontend
+node_modules/
+dist/
+build/
+
+# Instagram / Facebook sessions
+ig_outreach/INSTAGRAM_SESSION*.txt
+ig_outreach/session_virel.json
+ig_outreach/screenshots/
+fb_outreach/session_fb.txt
+fb_outreach/screenshots/
+fb_outreach/chrome_profile/
+
+# JSON files (sessions, lead contexts, etc.)
+*.json
+!package.json
+!package-lock.json
+!tsconfig*.json
+!vite.config*.json
+!tailwind.config*.json
+!postcss.config*.json
+!vercel.json
+!railway.json

@@ -1,0 +1,4 @@
+instagrapi==2.8.1
+google-genai==1.66.0
+python-dotenv==1.2.2
+httpx==0.28.1

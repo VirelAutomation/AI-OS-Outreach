@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FORGE OS | JARVIS INTERFACE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .jarvis-glow {
+            text-shadow: 0 0 20px rgba(227, 0, 15, 0.8);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(227, 0, 15, 0.3);
+            border-radius: 10px;
+        }
+        @keyframes fade-slide-up {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-msg {
+            animation: fade-slide-up 0.4s ease-out forwards;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "surface": "#000000",
+                    "primary": "#E3000F",
+                    "secondary-container": "#1a1a1a",
+                    "primary-container": "#E3000F",
+                    "primary-fixed-dim": "#E3000F",
+                    "surface-variant": "#111111",
+                    "surface-dim": "#080808",
+                    "secondary": "#ffffff",
+                    "on-tertiary-container": "#ffffff",
+                    "inverse-on-surface": "#000000",
+                    "outline-variant": "#333333",
+                    "on-primary-fixed-variant": "#ffffff",
+                    "error-container": "#93000a",
+                    "on-primary-container": "#ffffff",
+                    "tertiary-container": "#222222",
+                    "surface-container-highest": "#1a1a1a",
+                    "secondary-fixed": "#ffffff",
+                    "on-secondary-container": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#ffffff",
+                    "surface-container": "#0d0d0d",
+                    "on-surface-variant": "#999999",
+                    "error": "#E3000F",
+                    "inverse-surface": "#ffffff",
+                    "tertiary-fixed": "#ffffff",
+                    "tertiary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-background": "#ffffff",
+                    "surface-container-low": "#050505",
+                    "on-surface": "#ffffff",
+                    "outline": "#444444",
+                    "primary-fixed": "#ffffff",
+                    "on-error-container": "#ffffff",
+                    "inverse-primary": "#E3000F",
+                    "background": "#000000",
+                    "surface-tint": "#E3000F",
+                    "on-secondary-fixed-variant": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#ffffff",
+                    "surface-container-lowest": "#000000",
+                    "surface-bright": "#1a1a1a",
+                    "on-tertiary-fixed-variant": "#ffffff",
+                    "surface-container-high": "#111111",
+                    "on-primary-fixed": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "2px",
+                    "xl": "4px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "40px",
+                    "lg": "24px",
+                    "gutter": "20px",
+                    "xs": "4px",
+                    "base": "4px",
+                    "sm": "8px",
+                    "md": "16px",
+                    "margin": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Geist", "sans-serif"],
+                    "headline-md": ["Geist", "sans-serif"],
+                    "label-caps": ["JetBrains Mono", "monospace"],
+                    "headline-lg": ["Geist", "sans-serif"],
+                    "body-sm": ["Geist", "sans-serif"],
+                    "data-mono": ["JetBrains Mono", "monospace"],
+                    "headline-xl": ["Geist", "sans-serif"],
+                    "headline-lg-mobile": ["Geist", "sans-serif"]
+            },
+            "fontSize": {
+                    "body-lg": ["15px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["18px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-caps": ["11px", {"lineHeight": "1.0", "letterSpacing": "0.15em", "fontWeight": "500"}],
+                    "headline-lg": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "data-mono": ["13px", {"lineHeight": "1.0", "fontWeight": "400"}],
+                    "headline-xl": ["56px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "900"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg overflow-hidden h-screen flex">
+<!-- Sidebar Navigation -->
+<aside class="w-[260px] h-screen sticky left-0 top-0 border-r border-white/10 bg-surface-dim flex flex-col h-full py-lg px-md hidden md:flex shrink-0">
+<div class="mb-xl px-md">
+<h1 class="font-headline-lg text-headline-lg font-black tracking-tighter text-white">NEURAL SALES</h1>
+<p class="font-label-caps text-[9px] tracking-[0.3em] text-primary">AI COMMAND CENTER</p>
+</div>
+<nav class="flex-1 space-y-xs px-sm">
+<a class="flex items-center gap-md p-md text-white/50 hover:bg-white/5 hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-md p-md text-white bg-primary/10 border-l-2 border-primary font-bold transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="psychology" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-label-caps">Intelligence</span>
+</a>
+<a class="flex items-center gap-md p-md text-white/50 hover:bg-white/5 hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_tree">account_tree</span>
+<span class="font-label-caps">Pipeline</span>
+</a>
+<a class="flex items-center gap-md p-md text-white/50 hover:bg-white/5 hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-label-caps">Campaigns</span>
+</a>
+<a class="flex items-center gap-md p-md text-white/50 hover:bg-white/5 hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group_add">group_add</span>
+<span class="font-label-caps">Lead Bank</span>
+</a>
+<a class="flex items-center gap-md p-md text-white/50 hover:bg-white/5 hover:text-white transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="font-label-caps">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-white/5 pt-lg space-y-base px-sm">
+<button class="w-full py-md px-lg bg-primary text-white font-label-caps font-black hover:brightness-110 active:scale-[0.98] transition-all mb-md">
+            NEW DEPLOYMENT
+        </button>
+<div class="flex items-center gap-md p-md text-white/40 hover:text-white transition-colors cursor-pointer font-label-caps">
+<span class="material-symbols-outlined text-[20px]" data-icon="support_agent">support_agent</span>
+<span>Support</span>
+</div>
+<div class="flex items-center gap-md p-md text-white/40 hover:text-white transition-colors cursor-pointer font-label-caps">
+<span class="material-symbols-outlined text-[20px]" data-icon="terminal">terminal</span>
+<span>Terminal</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-screen relative bg-surface-container-lowest overflow-hidden">
+<!-- Top Bar -->
+<header class="flex justify-between items-center w-full px-lg py-md z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
+<div class="flex items-center gap-xl">
+<div class="font-label-caps font-black text-white flex items-center gap-sm">
+<span class="w-2 h-2 bg-primary animate-pulse"></span>
+                SALES COMMAND
+            </div>
+<div class="hidden lg:flex gap-xl border-l border-white/10 pl-xl">
+<div class="flex flex-col">
+<span class="text-[9px] font-label-caps text-white/30 uppercase">Live Session</span>
+<span class="text-white font-data-mono text-sm">04:12:45</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[9px] font-label-caps text-white/30 uppercase">Current Revenue</span>
+<span class="text-primary font-data-mono text-sm">$1,240,500.00</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<div class="bg-primary px-lg py-1">
+<span class="font-label-caps text-white text-[11px] font-black tracking-[0.2em]">DAY 01</span>
+</div>
+<div class="flex gap-md items-center border-l border-white/10 pl-lg">
+<span class="material-symbols-outlined text-white/60 cursor-pointer hover:text-primary transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-white/60 cursor-pointer hover:text-primary transition-colors" data-icon="history">history</span>
+<div class="w-8 h-8 border border-white/20 p-[2px]">
+<img alt="Agency Director" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all cursor-pointer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP6PwLXuHeYm8sTIg0usahED-Ae_wHJ_FTm1unvLabQ3IpWuY5ol7IDKMT43ZecKFkXLbYNoV7-TDlV2T5DwIXIVtVINOFHMjlkqbFbmGGb_Mib5hIaq08_ZIES6So-UAexg0BzpOuE6xO_ImrWzyYXlFaTZ_7VFfvs3809-rbDDijN3eEqjGJKYz3d7sQFQPqBVb3v0yQtUWh_lgJORlqSmUg18eb_xRQo-mb-DUBI2qMnOzl3HLf6p1m0-B_ij4vE87JiqgoYHk"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Jarvis Immersive Interface -->
+<div class="flex-1 overflow-hidden flex flex-col relative">
+<!-- Centered Waveform & Logo -->
+<div class="flex flex-col items-center justify-center pt-[60px] pb-xl flex-shrink-0">
+<div class="relative w-full max-w-[500px] flex justify-center items-center mb-sm">
+<canvas class="w-full h-20 opacity-80" id="jarvisWaveform"></canvas>
+</div>
+<h2 class="font-headline-xl text-white jarvis-glow tracking-[0.3em] font-black italic">JARVIS</h2>
+<div class="w-24 h-[1px] bg-primary mt-md"></div>
+</div>
+<!-- Chat Thread Area -->
+<div class="flex-1 overflow-y-auto px-lg md:px-xl pb-xl space-y-xl custom-scrollbar" id="chatContainer">
+<!-- Jarvis Message -->
+<div class="flex flex-col items-start max-w-2xl animate-msg">
+<div class="flex flex-col gap-xs mb-xs px-md">
+<span class="font-label-caps text-primary text-[10px] font-black">JARVIS • 09:00:01</span>
+</div>
+<div class="glass-card border-l-2 border-primary p-lg">
+<p class="font-body-lg text-white/90 leading-relaxed">Systems online, Operator. Virell Labs node synchronized. Forge OS is processing target milestones for the $15M MRR offensive. Would you like a situation report on the current deployment cycle?</p>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end w-full animate-msg">
+<div class="flex flex-col items-end gap-xs mb-xs px-md">
+<span class="font-label-caps text-white/40 text-[10px]">OPERATOR (JACE)</span>
+</div>
+<div class="bg-primary/5 border border-white/10 p-lg max-w-xl">
+<p class="font-body-lg text-white">Proceed with Morning Briefing. Focus on Aikiaa Ops Forge pipeline velocity. Are we on track for the 7-month target?</p>
+</div>
+</div>
+<!-- Jarvis Message -->
+<div class="flex flex-col items-start max-w-2xl animate-msg">
+<div class="flex flex-col gap-xs mb-xs px-md">
+<span class="font-label-caps text-primary text-[10px] font-black">JARVIS • 09:04:22</span>
+</div>
+<div class="glass-card border-l-2 border-primary p-lg space-y-lg">
+<p class="font-body-lg text-white/90 leading-relaxed">Briefing Initiated. Analysis shows a 14% deviation in lead scoring accuracy which is being auto-corrected. Pipeline velocity is currently at 1.4x baseline. To reach $15M MRR, we need to deploy 3 additional automated sequence nodes by EOD.</p>
+<div class="grid grid-cols-2 gap-md pt-md border-t border-white/5">
+<div class="bg-black/40 p-md border border-white/5">
+<p class="font-label-caps text-[9px] text-white/40 mb-1">CURR. REVENUE</p>
+<p class="font-data-mono text-primary text-lg font-bold">$1.24M</p>
+</div>
+<div class="bg-black/40 p-md border border-white/5">
+<p class="font-label-caps text-[9px] text-white/40 mb-1">PROJ. REVENUE</p>
+<p class="font-data-mono text-white text-lg font-bold">$15.02M</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Input Controls -->
+<div class="px-xl pb-xl bg-gradient-to-t from-black via-black/80 to-transparent">
+<div class="max-w-4xl mx-auto flex flex-col gap-md">
+<button class="self-start flex items-center gap-sm px-lg py-2 bg-primary/10 border border-primary text-white font-label-caps text-[10px] font-black hover:bg-primary hover:text-white transition-all group tracking-widest" id="briefingBtn">
+<span class="material-symbols-outlined text-[16px] group-hover:animate-pulse" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                    MORNING BRIEFING
+                </button>
+<div class="relative flex items-center group">
+<div class="absolute left-lg flex items-center text-white/30 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="mic">mic</span>
+</div>
+<input class="w-full bg-white/5 border border-white/10 py-lg pl-[56px] pr-[120px] text-white placeholder:text-white/20 focus:border-primary focus:ring-1 focus:ring-primary/20 focus:outline-none transition-all font-body-lg" id="jarvisInput" placeholder="ENTER COMMAND..." type="text"/>
+<div class="absolute right-md flex items-center gap-md">
+<span class="material-symbols-outlined text-white/30 cursor-pointer hover:text-white transition-colors" data-icon="attach_file">attach_file</span>
+<button class="bg-primary text-white w-12 h-12 flex items-center justify-center hover:brightness-125 transition-all shadow-[0_0_20px_rgba(227,0,15,0.4)]" id="sendBtn">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Context Overlay (Right Detail Rail) -->
+<aside class="hidden xl:flex w-[300px] bg-surface-dim border-l border-white/10 flex-col overflow-y-auto custom-scrollbar">
+<div class="p-lg space-y-xl">
+<section>
+<p class="font-label-caps text-primary text-[10px] mb-lg font-black tracking-[0.2em]">OPERATIONAL CONTEXT</p>
+<div class="space-y-lg border-l border-white/5 pl-lg">
+<div>
+<p class="font-label-caps text-[9px] text-white/30 mb-1 uppercase">Operator</p>
+<p class="font-headline-md text-white font-black tracking-tight">Jace</p>
+</div>
+<div>
+<p class="font-label-caps text-[9px] text-white/30 mb-1 uppercase">Entity</p>
+<p class="font-body-sm text-white/80">Virell Labs / Aikiaa Ops Forge</p>
+</div>
+<div>
+<p class="font-label-caps text-[9px] text-white/30 mb-1 uppercase">Strategic Goal</p>
+<p class="font-body-sm text-white font-bold">$15M MRR <span class="text-primary font-normal text-[11px] ml-1">7 MONTHS</span></p>
+</div>
+</div>
+</section>
+<section>
+<p class="font-label-caps text-primary text-[10px] mb-lg font-black tracking-[0.2em]">ACTIVE AGENTS</p>
+<div class="space-y-md">
+<div class="flex items-center gap-md p-md bg-white/5 border-l-2 border-primary">
+<div class="w-10 h-10 flex items-center justify-center bg-primary/20">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div>
+<p class="font-label-caps text-[11px] text-white font-bold tracking-wider">JARVIS CORE</p>
+<div class="flex items-center gap-1">
+<span class="w-1 h-1 rounded-full bg-green-500 animate-pulse"></span>
+<p class="text-[9px] text-white/40 uppercase tracking-tighter">Optimized</p>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-md p-md bg-white/5 opacity-40 hover:opacity-100 transition-opacity">
+<div class="w-10 h-10 flex items-center justify-center bg-white/10">
+<span class="material-symbols-outlined text-white text-[20px]" data-icon="monitoring">monitoring</span>
+</div>
+<div>
+<p class="font-label-caps text-[11px] text-white font-bold tracking-wider">QUANTSCANNER</p>
+<p class="text-[9px] text-white/40 uppercase tracking-tighter">Standby</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div class="mt-auto p-lg bg-black/40 border-t border-white/5">
+<div class="flex items-center justify-between mb-sm">
+<p class="font-label-caps text-[9px] text-primary font-black">SYSTEM LOAD</p>
+<p class="font-data-mono text-[10px] text-white">12.4%</p>
+</div>
+<div class="h-[1px] bg-white/10 w-full overflow-hidden">
+<div class="h-full bg-primary w-[12.4%]"></div>
+</div>
+</div>
+</aside>
+<script>
+    // --- Waveform Logic ---
+    const canvas = document.getElementById('jarvisWaveform');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let t = 0;
+    let pulseMagnitude = 0;
+
+    function resize() {
+        width = canvas.offsetWidth * window.devicePixelRatio;
+        height = canvas.offsetHeight * window.devicePixelRatio;
+        canvas.width = width;
+        canvas.height = height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function drawWave(frequency, amplitude, opacity, speedOffset) {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(227, 0, 15, ${opacity})`;
+        ctx.lineWidth = 1.5;
+        
+        const effectiveAmplitude = amplitude + (pulseMagnitude * 40);
+
+        for (let x = 0; x < width; x++) {
+            // Centered waveform calculation
+            const midX = width / 2;
+            const distFromCenter = Math.abs(x - midX) / midX;
+            const taper = Math.pow(1 - distFromCenter, 2); // Tapers off at edges
+            
+            const y = height / 2 + Math.sin(x * frequency + t * speedOffset) * effectiveAmplitude * taper;
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        t += 0.04;
+        
+        if (pulseMagnitude > 0) pulseMagnitude *= 0.94;
+        if (pulseMagnitude < 0.01) pulseMagnitude = 0;
+
+        // Symmetric 5-layer wave
+        drawWave(0.01, 4, 0.15, 1);
+        drawWave(0.015, 8, 0.35, 0.8);
+        drawWave(0.008, 12, 0.25, 1.2);
+        drawWave(0.02, 2, 0.5, 1.5);
+        drawWave(0.012, 6, 0.45, 0.6);
+
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    function triggerPulse() {
+        pulseMagnitude = 1;
+    }
+
+    // --- Chat & Interaction Logic ---
+    const chatContainer = document.getElementById('chatContainer');
+    const input = document.getElementById('jarvisInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const briefingBtn = document.getElementById('briefingBtn');
+
+    function addMessage(sender, text, isJarvis = false, extraHtml = '') {
+        const div = document.createElement('div');
+        div.className = `flex flex-col ${isJarvis ? 'items-start max-w-2xl' : 'items-end w-full'} animate-msg`;
+        
+        const timeStamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+
+        if (isJarvis) {
+            div.innerHTML = `
+                <div class="flex flex-col gap-xs mb-xs px-md">
+                    <span class="font-label-caps text-primary text-[10px] font-black">JARVIS • ${timeStamp}</span>
+                </div>
+                <div class="glass-card border-l-2 border-primary p-lg">
+                    <div class="space-y-lg">
+                        <p class="font-body-lg text-white/90 leading-relaxed">${text}</p>
+                        ${extraHtml}
+                    </div>
+                </div>
+            `;
+        } else {
+            div.innerHTML = `
+                <div class="flex flex-col items-end gap-xs mb-xs px-md">
+                    <span class="font-label-caps text-white/40 text-[10px]">${sender}</span>
+                </div>
+                <div class="bg-primary/5 border border-white/10 p-lg max-w-xl">
+                    <p class="font-body-lg text-white">${text}</p>
+                </div>
+            `;
+        }
+        
+        chatContainer.appendChild(div);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        triggerPulse();
+    }
+
+    function handleSend() {
+        const val = input.value.trim();
+        if (!val) return;
+        addMessage('OPERATOR (JACE)', val);
+        input.value = '';
+        
+        setTimeout(() => {
+            addMessage('JARVIS', "Command acknowledged. Systems recalibrating to current request. All neural nodes remain within optimal performance range.", true);
+        }, 1200);
+    }
+
+    sendBtn.addEventListener('click', handleSend);
+    input.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleSend(); });
+
+    briefingBtn.addEventListener('click', () => {
+        addMessage('OPERATOR (JACE)', 'Execute Morning Briefing protocol.');
+        
+        setTimeout(() => {
+            const briefingStats = `
+                <div class="grid grid-cols-2 gap-md pt-md border-t border-white/5">
+                    <div class="bg-black/40 p-md border border-white/5">
+                        <p class="font-label-caps text-[9px] text-white/40 mb-1 uppercase">Queue Status</p>
+                        <p class="font-data-mono text-primary text-lg font-bold">12 LEADS</p>
+                    </div>
+                    <div class="bg-black/40 p-md border border-white/5">
+                        <p class="font-label-caps text-[9px] text-white/40 mb-1 uppercase">Today's Goal</p>
+                        <p class="font-data-mono text-white text-lg font-bold">50 CALLS</p>
+                    </div>
+                </div>
+            `;
+            addMessage('JARVIS', "Morning Briefing prepared. We are prioritizing high-intent nodes in the Legal Vertical to maintain current performance metrics.", true, briefingStats);
+        }, 1000);
+    });
+</script>
+</body></html>

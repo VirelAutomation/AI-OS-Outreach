@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.local
+.env.*.local
+*.log
+data/
+credentials/
+backend-dev*
+*.err.log
+*.out.log

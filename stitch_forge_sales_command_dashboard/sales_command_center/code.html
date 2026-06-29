@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glow-red: rgba(227, 0, 15, 0.2);
+        }
+        body {
+            background-color: #0a0a0a;
+            color: #e5e2e1;
+            font-family: 'Geist', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+        .glass-modal {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .red-glow-focus:focus-within {
+            box-shadow: 0px 0px 15px var(--glow-red);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .funnel-step {
+            clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#353534",
+                      "inverse-primary": "#c0000b",
+                      "surface-tint": "#ffb4aa",
+                      "secondary-fixed": "#e2e2e2",
+                      "inverse-surface": "#e5e2e1",
+                      "primary-container": "#e3000f",
+                      "primary": "#ffb4aa",
+                      "outline": "#af8782",
+                      "surface-dim": "#131313",
+                      "on-tertiary-container": "#f8f5f4",
+                      "tertiary-fixed": "#e4e2e1",
+                      "secondary": "#c6c6c7",
+                      "on-primary-fixed-variant": "#930006",
+                      "on-surface": "#e5e2e1",
+                      "on-tertiary-fixed-variant": "#474746",
+                      "surface-container-lowest": "#0e0e0e",
+                      "on-error": "#690005",
+                      "on-secondary-container": "#b4b5b5",
+                      "surface-container-high": "#2a2a2a",
+                      "error-container": "#93000a",
+                      "surface-variant": "#353534",
+                      "tertiary": "#c8c6c5",
+                      "on-surface-variant": "#e9bcb6",
+                      "tertiary-container": "#717070",
+                      "surface-container-low": "#1c1b1b",
+                      "on-secondary": "#2f3131",
+                      "on-primary-fixed": "#410001",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "error": "#ffb4ab",
+                      "secondary-fixed-dim": "#c6c6c7",
+                      "on-primary": "#690003",
+                      "primary-fixed": "#ffdad5",
+                      "on-primary-container": "#fff4f2",
+                      "surface-bright": "#3a3939",
+                      "secondary-container": "#454747",
+                      "surface": "#131313",
+                      "on-tertiary-fixed": "#1b1c1c",
+                      "background": "#131313",
+                      "tertiary-fixed-dim": "#c8c6c5",
+                      "outline-variant": "#5e3f3a",
+                      "on-background": "#e5e2e1",
+                      "on-tertiary": "#303030",
+                      "surface-container": "#201f1f",
+                      "primary-fixed-dim": "#ffb4aa",
+                      "on-secondary-fixed-variant": "#454747",
+                      "inverse-on-surface": "#313030",
+                      "on-error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "gutter": "20px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "xl": "40px",
+                      "margin": "32px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Geist"],
+                      "body-sm": ["Geist"],
+                      "headline-md": ["Geist"],
+                      "data-mono": ["JetBrains Mono"],
+                      "label-caps": ["JetBrains Mono"],
+                      "headline-lg": ["Geist"],
+                      "headline-xl": ["Geist"]
+              },
+              "fontSize": {
+                      "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "data-mono": ["14px", {"lineHeight": "1.0", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar (Shared Component) -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 bg-surface-dim border-r border-outline-variant/20 flex flex-col py-lg px-md z-50">
+<div class="mb-xl px-sm">
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tighter text-primary">NEURAL SALES</h1>
+<p class="font-label-caps text-label-caps opacity-60">AI COMMAND CENTER</p>
+</div>
+<nav class="flex-1 space-y-sm">
+<!-- Active: Dashboard -->
+<a class="flex items-center gap-md px-md py-sm text-on-primary-container bg-primary-container/20 border-l-4 border-primary font-bold scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-caps text-label-caps">Intelligence</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="font-label-caps text-label-caps">Pipeline</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-label-caps text-label-caps">Campaigns</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group_add">group_add</span>
+<span class="font-label-caps text-label-caps">Lead Bank</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/10 pt-lg space-y-sm px-sm">
+<button class="w-full bg-primary-container text-on-primary-container font-label-caps py-md rounded-lg hover:brightness-110 transition-all flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                New Deployment
+            </button>
+<a class="flex items-center gap-md py-sm text-secondary opacity-70 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+<a class="flex items-center gap-md py-sm text-secondary opacity-70 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-label-caps text-label-caps">Terminal</span>
+</a>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 flex flex-col max-w-[1600px] w-full">
+<!-- TopAppBar (Shared Component) -->
+<header class="bg-surface/80 backdrop-blur-xl sticky top-0 z-50 border-b border-outline-variant/10 shadow-md">
+<div class="flex justify-between items-center w-full px-lg py-sm">
+<div class="flex items-center gap-xl">
+<span class="font-label-caps text-label-caps font-black text-primary">SALES COMMAND</span>
+<div class="hidden md:flex gap-lg items-center">
+<span class="font-data-mono text-data-mono text-primary animate-pulse">LIVE SESSION: 04:12:45</span>
+<span class="font-data-mono text-data-mono text-on-surface">REVENUE: $1.2M</span>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">DISTANCE TO $15K MRR</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm mr-md">
+<button class="bg-surface-container-highest px-md py-xs rounded text-secondary font-label-caps hover:text-primary transition-all">New Campaign</button>
+<button class="bg-primary-container text-on-primary-container px-md py-xs rounded font-label-caps hover:brightness-110 transition-all">Add Lead</button>
+</div>
+<div class="flex items-center gap-md text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors" data-icon="history">history</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/20">
+<img alt="Agency Director Avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a professional agency director with a sharp, modern appearance. The lighting is dramatic and cinematic, with a high-contrast dark-mode aesthetic featuring deep blacks and subtle red rim lighting. The background is a soft-focus digital control center with glowing interfaces, reinforcing a high-tech sales command atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3VL6csduKR3yEkiVjBoOkO1VYc1rlSjYgl7W7_A4bRu6qoMMagzjUpDglny-e9k3qO3OdNtzZh2iONVhS7rYaepVinbU2iTk05cnJ4kbNe5zvoRqvuep3OCDhgw7wYTq7aJErlKRnZkkFgrc0KWse5RpGdTV4z665L3WZg9VPjxe9LsNj35ze8ZsJh8ol4oC2H0TcejE99Y2tWUR-JEunYr2nJ6addj96RD5hYEwdXgir1HO_wZqt0rDZHj73zuhDy_rpWAkywzI"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<div class="p-xl space-y-xl">
+<!-- Quick Actions Banner -->
+<div class="flex items-center justify-between gap-lg overflow-x-auto pb-sm">
+<div class="flex gap-md">
+<button class="flex items-center gap-sm glass-card px-lg py-md rounded-xl hover:bg-surface-container-highest transition-all group">
+<span class="material-symbols-outlined text-primary" data-icon="call">call</span>
+<span class="font-label-caps text-label-caps">Log Call</span>
+</button>
+<button class="flex items-center gap-sm glass-card px-lg py-md rounded-xl hover:bg-surface-container-highest transition-all group">
+<span class="material-symbols-outlined text-primary" data-icon="campaign">campaign</span>
+<span class="font-label-caps text-label-caps">New Campaign</span>
+</button>
+<button class="flex items-center gap-sm glass-card px-lg py-md rounded-xl hover:bg-surface-container-highest transition-all group">
+<span class="material-symbols-outlined text-primary" data-icon="person_add">person_add</span>
+<span class="font-label-caps text-label-caps">Add Lead</span>
+</button>
+</div>
+<div class="flex items-center gap-sm text-secondary opacity-50">
+<span class="font-data-mono text-data-mono">SYNC STATUS: NOMINAL</span>
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+</div>
+</div>
+<!-- Bento Grid - Section 1: Stats & Rings -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg h-auto">
+<!-- Stat Card 1 -->
+<div class="md:col-span-3 glass-card p-lg rounded-xl flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant block mb-sm">TOTAL LEADS</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface">1,240</h2>
+</div>
+<div class="mt-lg flex items-center text-primary font-data-mono text-data-mono">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="trending_up">trending_up</span>
+                        +12.5% vs LW
+                    </div>
+</div>
+<!-- Stat Card 2 -->
+<div class="md:col-span-3 glass-card p-lg rounded-xl flex flex-col justify-between border-l-2 border-l-primary/40">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant block mb-sm">APPOINTMENTS</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface">24</h2>
+</div>
+<div class="mt-lg flex items-center text-primary font-data-mono text-data-mono">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="event_available">event_available</span>
+                        8 Today
+                    </div>
+</div>
+<!-- Progress Ring Card 1 -->
+<div class="md:col-span-3 glass-card p-lg rounded-xl flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-xs">WEEKLY CALLS</span>
+<span class="font-headline-md text-headline-md text-on-surface">170/200</span>
+</div>
+<div class="relative w-16 h-16">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="text-white/5" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="3"></path>
+<path class="text-primary progress-ring-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="85, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-data-mono text-[10px]">85%</span>
+</div>
+</div>
+<!-- Progress Ring Card 2 -->
+<div class="md:col-span-3 glass-card p-lg rounded-xl flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-xs">WEEKLY EMAILS</span>
+<span class="font-headline-md text-headline-md text-on-surface">4.6k/5k</span>
+</div>
+<div class="relative w-16 h-16">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="text-white/5" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="3"></path>
+<path class="text-primary progress-ring-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="92, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-data-mono text-[10px]">92%</span>
+</div>
+</div>
+</div>
+<!-- Section 2 & 3 Combined -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- Conversion Funnel -->
+<div class="md:col-span-8 glass-card p-lg rounded-xl overflow-hidden relative">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">CONVERSION FUNNEL</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-60">Revenue Closed: $8.4k (Today)</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="filter_alt">filter_alt</span>
+</div>
+<div class="flex flex-col gap-sm relative z-10">
+<!-- Step 1 -->
+<div class="funnel-step w-full h-16 bg-white/5 border border-white/10 flex items-center justify-between px-xl group hover:bg-white/10 transition-all cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="font-label-caps text-label-caps text-primary">LEADS</span>
+<span class="font-body-sm text-body-sm opacity-40">1,240 Entered</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface">100%</span>
+</div>
+<!-- Step 2 -->
+<div class="funnel-step w-[85%] mx-auto h-16 bg-white/5 border border-white/10 flex items-center justify-between px-xl group hover:bg-white/10 transition-all cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="font-label-caps text-label-caps text-primary">CALLS</span>
+<span class="font-body-sm text-body-sm opacity-40">482 Outbound</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface">38.8%</span>
+</div>
+<!-- Step 3 -->
+<div class="funnel-step w-[70%] mx-auto h-16 bg-white/5 border border-white/10 flex items-center justify-between px-xl group hover:bg-white/10 transition-all cursor-pointer">
+<div class="flex items-center gap-md">
+<span class="font-label-caps text-label-caps text-primary">MEETINGS</span>
+<span class="font-body-sm text-body-sm opacity-40">24 Scheduled</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface">5.0%</span>
+</div>
+<!-- Step 4 -->
+<div class="funnel-step w-[55%] mx-auto h-16 bg-primary-container/20 border border-primary/20 flex items-center justify-between px-xl group hover:bg-primary-container/30 transition-all cursor-pointer shadow-[0_0_20px_rgba(227,0,15,0.1)]">
+<div class="flex items-center gap-md">
+<span class="font-label-caps text-label-caps text-primary font-bold">CLOSED</span>
+<span class="font-body-sm text-body-sm text-primary opacity-60">9 Deals Won</span>
+</div>
+<span class="font-headline-md text-headline-md text-primary">1.8%</span>
+</div>
+</div>
+<!-- Subtle Decorative Glow behind funnel -->
+<div class="absolute -bottom-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/10 blur-[100px] rounded-full"></div>
+</div>
+<!-- Recent Activity Feed -->
+<div class="md:col-span-4 glass-card p-lg rounded-xl flex flex-col">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-headline-md text-headline-md text-on-surface">RECENT ACTIVITY</h3>
+<span class="font-label-caps text-label-caps text-primary cursor-pointer hover:underline">VIEW ALL</span>
+</div>
+<div class="flex-1 space-y-md overflow-y-auto max-h-[400px] pr-sm scrollbar-hide">
+<!-- Activity Item -->
+<div class="flex gap-md group">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0 border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="phone_callback">phone_callback</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface">Call Completed with <strong class="text-primary">Marcus V.</strong></span>
+<span class="font-data-mono text-[11px] text-on-surface-variant opacity-60">2 MINS AGO • DURATION: 12:40</span>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0 border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface">Deal Closed: <strong class="text-primary">$2,400</strong></span>
+<span class="font-data-mono text-[11px] text-on-surface-variant opacity-60">14 MINS AGO • ACME CORP</span>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0 border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="mail">mail</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface">Email Opened by <strong class="text-on-surface">Sarah J.</strong></span>
+<span class="font-data-mono text-[11px] text-on-surface-variant opacity-60">45 MINS AGO • Q4 PROPOSAL</span>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0 border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="calendar_today">calendar_today</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface">New Appointment Set</span>
+<span class="font-data-mono text-[11px] text-on-surface-variant opacity-60">1 HOUR AGO • TOMORROW 10:00AM</span>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0 border border-outline-variant/20 opacity-50">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="campaign">campaign</span>
+</div>
+<div class="flex flex-col opacity-50">
+<span class="font-body-sm text-body-sm text-on-surface">Campaign "Winter Surge" Live</span>
+<span class="font-data-mono text-[11px] text-on-surface-variant">3 HOURS AGO</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Meta -->
+<div class="flex justify-between items-center pt-xl border-t border-outline-variant/10">
+<div class="flex gap-lg">
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-caps text-label-caps opacity-40">SYSTEM STATUS: OPTIMAL</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px] opacity-40" data-icon="shield">shield</span>
+<span class="font-label-caps text-label-caps opacity-40">ENCRYPTION: ACTIVE</span>
+</div>
+</div>
+<span class="font-data-mono text-[11px] opacity-40">BUILD v2.4.1029 // NEURAL_SALES_OS</span>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interactions for live timer
+        let seconds = 15165; // Starting from 04:12:45
+        const timerDisplay = document.querySelector('.animate-pulse');
+        
+        setInterval(() => {
+            seconds++;
+            const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            timerDisplay.textContent = `LIVE SESSION: ${h}:${m}:${s}`;
+        }, 1000);
+
+        // Hover effects on cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

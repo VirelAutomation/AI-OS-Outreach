@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEURAL SALES | COMMAND CENTER</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0a0a0a;
+            color: #e5e2e1;
+            font-family: 'Geist', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(227, 0, 15, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .inner-glow-red:focus-within {
+            box-shadow: inset 0 0 10px rgba(227, 0, 15, 0.15), 0 0 15px rgba(227, 0, 15, 0.2);
+            border-color: #e3000f !important;
+        }
+        .heatmap-cell {
+            aspect-ratio: 1 / 1;
+            border-radius: 2px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #353534; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #e3000f; }
+
+        @keyframes pulse-red {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .live-indicator {
+            animation: pulse-red 2s infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "surface-container-highest": "#353534",
+                "inverse-primary": "#c0000b",
+                "surface-tint": "#ffb4aa",
+                "secondary-fixed": "#e2e2e2",
+                "inverse-surface": "#e5e2e1",
+                "primary-container": "#e3000f",
+                "primary": "#ffb4aa",
+                "outline": "#af8782",
+                "surface-dim": "#131313",
+                "on-tertiary-container": "#f8f5f4",
+                "tertiary-fixed": "#e4e2e1",
+                "secondary": "#c6c6c7",
+                "on-primary-fixed-variant": "#930006",
+                "on-surface": "#e5e2e1",
+                "on-tertiary-fixed-variant": "#474746",
+                "surface-container-lowest": "#0e0e0e",
+                "on-error": "#690005",
+                "on-secondary-container": "#b4b5b5",
+                "surface-container-high": "#2a2a2a",
+                "error-container": "#93000a",
+                "surface-variant": "#353534",
+                "tertiary": "#c8c6c5",
+                "on-surface-variant": "#e9bcb6",
+                "tertiary-container": "#717070",
+                "surface-container-low": "#1c1b1b",
+                "on-secondary": "#2f3131",
+                "on-primary-fixed": "#410001",
+                "on-secondary-fixed": "#1a1c1c",
+                "error": "#ffb4ab",
+                "secondary-fixed-dim": "#c6c6c7",
+                "on-primary": "#690003",
+                "primary-fixed": "#ffdad5",
+                "on-primary-container": "#fff4f2",
+                "surface-bright": "#3a3939",
+                "secondary-container": "#454747",
+                "surface": "#131313",
+                "on-tertiary-fixed": "#1b1c1c",
+                "background": "#131313",
+                "tertiary-fixed-dim": "#c8c6c5",
+                "outline-variant": "#5e3f3a",
+                "on-background": "#e5e2e1",
+                "on-tertiary": "#303030",
+                "surface-container": "#201f1f",
+                "primary-fixed-dim": "#ffb4aa",
+                "on-secondary-fixed-variant": "#454747",
+                "inverse-on-surface": "#313030",
+                "on-error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+              },
+              "spacing": {
+                "base": "4px",
+                "gutter": "20px",
+                "md": "16px",
+                "xs": "4px",
+                "sm": "8px",
+                "lg": "24px",
+                "xl": "40px",
+                "margin": "32px"
+              },
+              "fontFamily": {
+                "body-lg": ["Geist"],
+                "body-sm": ["Geist"],
+                "headline-md": ["Geist"],
+                "data-mono": ["JetBrains Mono"],
+                "label-caps": ["JetBrains Mono"],
+                "headline-lg": ["Geist"],
+                "headline-xl": ["Geist"]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="flex min-h-screen bg-surface-dim">
+<!-- SIDE NAV BAR -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 bg-surface-dim border-r border-outline-variant/20 flex flex-col py-lg px-md hidden md:flex">
+<div class="mb-xl px-sm">
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tighter text-primary">NEURAL SALES</h1>
+<p class="font-label-caps text-[10px] tracking-[0.2em] opacity-50">AI COMMAND CENTER</p>
+</div>
+<nav class="flex-1 space-y-sm">
+<a class="flex items-center gap-md px-md py-sm text-on-primary-container bg-primary-container/20 border-l-4 border-primary font-bold scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-caps">Intelligence</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-caps">Pipeline</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">rocket_launch</span>
+<span class="font-label-caps">Campaigns</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group_add</span>
+<span class="font-label-caps">Lead Bank</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-caps">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant/10">
+<button class="w-full bg-primary-container text-on-primary-container py-md mb-lg font-bold font-label-caps tracking-widest hover:brightness-110 transition-all active:scale-95">
+                New Deployment
+            </button>
+<div class="space-y-sm">
+<a class="flex items-center gap-md px-md py-xs text-secondary opacity-70 text-body-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">support_agent</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-md px-md py-xs text-secondary opacity-70 text-body-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+<span>Terminal</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TOP APP BAR -->
+<header class="sticky top-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-md">
+<div class="flex justify-between items-center w-full px-lg py-sm max-w-[1600px] mx-auto">
+<div class="flex items-center gap-xl">
+<span class="font-label-caps font-black text-primary">SALES COMMAND</span>
+<div class="hidden lg:flex items-center gap-lg">
+<div class="flex items-center gap-sm text-on-surface-variant font-label-caps text-[10px]">
+<span class="w-2 h-2 rounded-full bg-primary-container live-indicator"></span>
+                            LIVE SESSION: 04:12:45
+                        </div>
+<div class="text-on-surface-variant font-label-caps text-[10px] tracking-widest">
+                            REVENUE: <span class="text-primary-container">$1.2M</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm bg-surface-container-low px-md py-xs border border-outline-variant/20 rounded-lg">
+<span class="material-symbols-outlined text-[18px] opacity-50">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-data-mono text-xs w-48 placeholder:opacity-30" placeholder="QUERY NEURAL NET..." type="text"/>
+</div>
+<div class="flex gap-sm">
+<button class="p-xs hover:bg-surface-container rounded-lg text-secondary transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-xs hover:bg-surface-container rounded-lg text-secondary transition-all">
+<span class="material-symbols-outlined">history</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant/20 mx-sm"></div>
+<img alt="Director" class="w-8 h-8 rounded-full border border-primary/50" data-alt="A professional headshot of a high-level executive with a sharp, modern appearance. The background is a dark, sophisticated office with soft cinematic red backlighting that matches a high-tech sales command center aesthetic. The lighting is focused and dramatic, highlighting sharp features and a confident expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUorNRWAlHg9pFdbGIoqcUiZx2-cb6uYzedyt-Jh3KuKpCk_lhTXcOJykXL1iIly4yyJpoUpmX6SaMP0B5JU6W_-lRqD6A6etfNF_142GYPA0NcownplFuxjdC1k-RY6TOMDRFqOJ366u-mYE-YWS0t8NoWAz5QY85rB6GjF_mgh20l3x0uAkR4YNiEt1dT6qo9q4Gk57pzdmFfsi0yvMPESUt6cyatHY-EDeV7kv7K4RVOPAgelzGfmZrP7Tb7PUNL77eMpR6Ciw"/>
+</div>
+</div>
+</header>
+<!-- DASHBOARD CANVAS -->
+<div class="p-lg max-w-[1600px] mx-auto w-full space-y-lg">
+<!-- SECTION 1: CALL ANALYTICS -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Line Graph: Call Volume -->
+<div class="lg:col-span-2 glass-card p-lg rounded-xl overflow-hidden relative">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<h2 class="font-label-caps text-secondary opacity-60 mb-xs">DAILY CALL VOLUME</h2>
+<p class="font-headline-md text-white">4,281 <span class="text-primary-container text-body-sm font-data-mono ml-sm">+12.4%</span></p>
+</div>
+<div class="flex gap-xs">
+<button class="px-sm py-[2px] bg-primary-container text-white text-[10px] font-bold rounded">24H</button>
+<button class="px-sm py-[2px] border border-outline-variant/30 text-secondary text-[10px] rounded">7D</button>
+</div>
+</div>
+<!-- Mock Line Chart SVG -->
+<div class="h-[200px] w-full mt-lg relative">
+<svg class="w-full h-full preserve-3d" viewbox="0 0 1000 200">
+<defs>
+<lineargradient id="line-grad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#e3000f" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#e3000f" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,150 Q100,140 200,100 T400,120 T600,60 T800,80 T1000,40 V200 H0 Z" fill="url(#line-grad)"></path>
+<path d="M0,150 Q100,140 200,100 T400,120 T600,60 T800,80 T1000,40" fill="none" stroke="#e3000f" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="absolute bottom-0 left-0 right-0 flex justify-between font-data-mono text-[10px] text-secondary opacity-30 pt-md border-t border-outline-variant/10">
+<span>00:00</span><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span>
+</div>
+</div>
+</div>
+<!-- Heatmap: Best Performing Hours -->
+<div class="glass-card p-lg rounded-xl">
+<h2 class="font-label-caps text-secondary opacity-60 mb-lg">EFFICIENCY HEATMAP</h2>
+<div class="grid grid-cols-7 gap-sm">
+<!-- Generation of 49 cells for 7 days x 7 segments -->
+<script>
+                            const segments = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+                            document.write(segments.map(s => `<div class="text-[10px] text-center font-data-mono opacity-40">${s}</div>`).join(''));
+                            for(let i=0; i<42; i++) {
+                                const op = Math.random();
+                                document.write(`<div class="heatmap-cell" style="background: rgba(227, 0, 15, ${op > 0.3 ? op : 0.05})"></div>`);
+                            }
+                        </script>
+</div>
+<div class="mt-lg flex justify-between items-center">
+<span class="text-[10px] font-data-mono opacity-40">LOW ACTIVITY</span>
+<div class="flex gap-1">
+<div class="w-3 h-3 bg-primary-container/10"></div>
+<div class="w-3 h-3 bg-primary-container/40"></div>
+<div class="w-3 h-3 bg-primary-container/70"></div>
+<div class="w-3 h-3 bg-primary-container"></div>
+</div>
+<span class="text-[10px] font-data-mono opacity-40">PEAK</span>
+</div>
+</div>
+</div>
+<!-- SECTION 2: EMAIL CAMPAIGNS & VOLUME -->
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-lg">
+<!-- Active Campaigns Table -->
+<div class="xl:col-span-3 glass-card rounded-xl overflow-hidden">
+<div class="p-lg border-b border-outline-variant/10 flex justify-between items-center">
+<h2 class="font-label-caps text-secondary opacity-60">ACTIVE EMAIL CAMPAIGNS</h2>
+<button class="text-primary font-label-caps text-[10px] flex items-center gap-xs">
+                            VIEW ALL <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant/10 font-label-caps text-[10px] text-secondary/60">
+<th class="px-lg py-md">CAMPAIGN</th>
+<th class="px-lg py-md">SENT</th>
+<th class="px-lg py-md">OPENS</th>
+<th class="px-lg py-md">REPLIES</th>
+<th class="px-lg py-md">MEETINGS</th>
+<th class="px-lg py-md text-right">TREND</th>
+</tr>
+</thead>
+<tbody class="text-body-sm font-data-mono">
+<tr class="border-b border-outline-variant/5 hover:bg-white/[0.02] transition-colors group">
+<td class="px-lg py-md font-body-lg text-white font-medium">Q4 SaaS Outreach</td>
+<td class="px-lg py-md text-secondary">12,402</td>
+<td class="px-lg py-md text-secondary">42.1%</td>
+<td class="px-lg py-md text-primary-container">8.4%</td>
+<td class="px-lg py-md text-white font-bold">142</td>
+<td class="px-lg py-md text-right">
+<div class="inline-flex gap-[2px] h-4 items-end">
+<div class="w-1 bg-primary-container h-2"></div>
+<div class="w-1 bg-primary-container h-3"></div>
+<div class="w-1 bg-primary-container h-4"></div>
+<div class="w-1 bg-primary-container h-2"></div>
+</div>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/5 hover:bg-white/[0.02] transition-colors group">
+<td class="px-lg py-md font-body-lg text-white font-medium">FinTech Reactivation</td>
+<td class="px-lg py-md text-secondary">8,110</td>
+<td class="px-lg py-md text-secondary">38.5%</td>
+<td class="px-lg py-md text-primary-container">6.2%</td>
+<td class="px-lg py-md text-white font-bold">88</td>
+<td class="px-lg py-md text-right">
+<div class="inline-flex gap-[2px] h-4 items-end">
+<div class="w-1 bg-secondary/20 h-4"></div>
+<div class="w-1 bg-secondary/20 h-2"></div>
+<div class="w-1 bg-primary-container h-3"></div>
+<div class="w-1 bg-primary-container h-4"></div>
+</div>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/5 hover:bg-white/[0.02] transition-colors group">
+<td class="px-lg py-md font-body-lg text-white font-medium">Enterprise Cold-In</td>
+<td class="px-lg py-md text-secondary">24,800</td>
+<td class="px-lg py-md text-secondary">18.9%</td>
+<td class="px-lg py-md text-primary-container">2.1%</td>
+<td class="px-lg py-md text-white font-bold">34</td>
+<td class="px-lg py-md text-right">
+<div class="inline-flex gap-[2px] h-4 items-end">
+<div class="w-1 bg-primary-container h-2"></div>
+<div class="w-1 bg-secondary/20 h-2"></div>
+<div class="w-1 bg-secondary/20 h-1"></div>
+<div class="w-1 bg-secondary/20 h-2"></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Area Chart: Email Volume -->
+<div class="glass-card p-lg rounded-xl flex flex-col">
+<h2 class="font-label-caps text-secondary opacity-60 mb-lg">OUTBOUND VELOCITY</h2>
+<div class="flex-1 flex items-end gap-sm h-32 mb-md">
+<div class="flex-1 bg-primary-container/10 border-t border-primary-container/30 rounded-t-sm h-[40%]"></div>
+<div class="flex-1 bg-primary-container/20 border-t border-primary-container/50 rounded-t-sm h-[65%]"></div>
+<div class="flex-1 bg-primary-container/30 border-t border-primary-container/70 rounded-t-sm h-[55%]"></div>
+<div class="flex-1 bg-primary-container/40 border-t border-primary-container/90 rounded-t-sm h-[85%]"></div>
+<div class="flex-1 bg-primary-container rounded-t-sm h-[95%] relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-black font-data-mono text-[10px] px-sm py-[2px] rounded">78K</div>
+</div>
+</div>
+<div class="pt-md border-t border-outline-variant/10">
+<p class="text-white font-headline-md">78.4K <span class="text-secondary-fixed text-body-sm opacity-50">EMAILS/DAY</span></p>
+</div>
+</div>
+</div>
+<!-- SECTION 3: LOG FORM & FOLLOW-UP -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+<!-- Log Call Form -->
+<div class="glass-card p-lg rounded-xl">
+<div class="flex items-center gap-md mb-xl">
+<div class="p-sm bg-primary-container/10 border border-primary-container/20 rounded-lg">
+<span class="material-symbols-outlined text-primary-container">add_call</span>
+</div>
+<h2 class="font-headline-md text-white">Log Deployment Result</h2>
+</div>
+<form class="space-y-lg">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="space-y-sm">
+<label class="font-label-caps text-[10px] text-secondary opacity-50">LEAD ID / IDENTIFIER</label>
+<input class="w-full bg-black/30 border border-outline-variant/20 rounded-lg px-md py-sm focus:ring-1 focus:ring-primary-container focus:border-primary-container outline-none text-data-mono inner-glow-red" type="text" value="NS-8821-X"/>
+</div>
+<div class="space-y-sm">
+<label class="font-label-caps text-[10px] text-secondary opacity-50">RESULT ARCHETYPE</label>
+<select class="w-full bg-black/30 border border-outline-variant/20 rounded-lg px-md py-sm focus:ring-1 focus:ring-primary-container focus:border-primary-container outline-none font-body-sm appearance-none">
+<option>Discovery Meeting Booked</option>
+<option>Follow-up Required</option>
+<option>Hard Reject</option>
+<option>No Response</option>
+</select>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="font-label-caps text-[10px] text-secondary opacity-50">LOG TRANSCRIPT / NOTES</label>
+<textarea class="w-full bg-black/30 border border-outline-variant/20 rounded-lg px-md py-sm focus:ring-1 focus:ring-primary-container focus:border-primary-container outline-none text-body-sm" placeholder="Neural notes or call summary..." rows="3"></textarea>
+</div>
+<div class="flex items-center gap-lg pt-md">
+<button class="flex-1 bg-primary-container text-on-primary-container py-md font-bold font-label-caps tracking-widest hover:brightness-110 active:scale-95 transition-all" type="submit">
+                                SUBMIT LOG
+                            </button>
+<button class="px-xl py-md border border-outline-variant/30 text-white font-label-caps hover:bg-white/5 transition-all" type="button">
+                                CANCEL
+                            </button>
+</div>
+</form>
+</div>
+<!-- Follow-up Queue -->
+<div class="glass-card flex flex-col rounded-xl h-full">
+<div class="p-lg border-b border-outline-variant/10 flex justify-between items-center">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">timer</span>
+<h2 class="font-label-caps text-secondary">FOLLOW-UP QUEUE</h2>
+</div>
+<span class="bg-surface-container-highest px-sm py-[2px] text-[10px] font-data-mono text-white rounded">12 PENDING</span>
+</div>
+<div class="flex-1 overflow-y-auto p-md space-y-sm">
+<!-- Queue Item 1 -->
+<div class="flex items-center gap-md p-md bg-white/[0.02] border-l-2 border-primary rounded-r-lg group hover:bg-white/[0.05] transition-all cursor-pointer">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center font-bold text-primary border border-outline-variant/20">JB</div>
+<div class="flex-1">
+<h4 class="text-body-sm font-bold text-white">Julian Black</h4>
+<p class="text-[10px] text-secondary opacity-50">Enterprise Lead @ Apex Corp</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-data-mono text-primary">02:15:00</p>
+<p class="text-[10px] text-secondary opacity-30">OVERDUE</p>
+</div>
+</div>
+<!-- Queue Item 2 -->
+<div class="flex items-center gap-md p-md bg-white/[0.02] border-l-2 border-secondary/20 rounded-r-lg group hover:bg-white/[0.05] transition-all cursor-pointer">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center font-bold text-white/50 border border-outline-variant/20">RS</div>
+<div class="flex-1">
+<h4 class="text-body-sm font-bold text-white">Ray Sterling</h4>
+<p class="text-[10px] text-secondary opacity-50">Head of Ops @ Volt</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-data-mono text-secondary">08:30:00</p>
+<p class="text-[10px] text-secondary opacity-30">T-MINUS</p>
+</div>
+</div>
+<!-- Queue Item 3 -->
+<div class="flex items-center gap-md p-md bg-white/[0.02] border-l-2 border-secondary/20 rounded-r-lg group hover:bg-white/[0.05] transition-all cursor-pointer">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center font-bold text-white/50 border border-outline-variant/20">MK</div>
+<div class="flex-1">
+<h4 class="text-body-sm font-bold text-white">Mina Kova</h4>
+<p class="text-[10px] text-secondary opacity-50">Founder @ Zenith AI</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-data-mono text-secondary">10:00:00</p>
+<p class="text-[10px] text-secondary opacity-30">T-MINUS</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- FOOTER / STAT BAR -->
+<footer class="mt-auto border-t border-outline-variant/10 py-sm px-lg bg-surface-container-lowest">
+<div class="flex justify-between items-center max-w-[1600px] mx-auto text-[10px] font-data-mono text-secondary opacity-40">
+<div class="flex gap-lg">
+<span>SYSTEM STATUS: <span class="text-primary-container">OPTIMAL</span></span>
+<span>LATENCY: 12ms</span>
+</div>
+<div class="flex gap-lg">
+<span>NEURAL SALES v2.4.0</span>
+<span>© 2024 COMMANDER AI</span>
+</div>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interaction: Update "Live Session" timer
+        let seconds = 15165; // Starting value (04:12:45)
+        const timerElement = document.querySelector('div.flex.items-center.gap-sm.text-on-surface-variant');
+        
+        setInterval(() => {
+            seconds++;
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            const formatted = `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            if(timerElement) {
+                timerElement.innerHTML = `<span class="w-2 h-2 rounded-full bg-primary-container live-indicator"></span> LIVE SESSION: ${formatted}`;
+            }
+        }, 1000);
+
+        // Hover effects for heatmap
+        document.querySelectorAll('.heatmap-cell').forEach(cell => {
+            cell.addEventListener('mouseover', () => {
+                cell.style.boxShadow = '0 0 10px #e3000f';
+                cell.style.zIndex = '10';
+            });
+            cell.addEventListener('mouseout', () => {
+                cell.style.boxShadow = 'none';
+                cell.style.zIndex = '0';
+            });
+        });
+    </script>
+</body></html>

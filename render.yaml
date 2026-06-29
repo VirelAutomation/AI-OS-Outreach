@@ -1,0 +1,81 @@
+# AI OS Backend — Render Blueprint
+# Repo: https://github.com/VirelAutomation/AI-OS-Backend
+#
+# Deploy: Render Dashboard → New → Blueprint → connect this repo → Apply
+# Or: push render.yaml to main and import the Blueprint from GitHub.
+
+services:
+  - type: web
+    name: ai-os-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerCommand: ./start.sh
+    plan: starter
+    region: oregon
+    healthCheckPath: /health/
+    autoDeployTrigger: commit
+    branch: main
+
+    # Persistent disk for outreach DBs, IG/FB sessions, runtime state
+    disk:
+      name: ai-os-data
+      mountPath: /data
+      sizeGB: 1
+
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: DATA_DIR
+        value: /data
+      - key: APP_ENV
+        value: production
+      - key: IG_HEADLESS
+        value: "1"
+      - key: PYTHONUNBUFFERED
+        value: "1"
+
+      # ── Set these in Render Dashboard (Environment → Secret Files / env vars) ──
+      - key: API_SECRET_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: REDIS_PASSWORD
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY_JARVIS
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: INSTAGRAM_USERNAME
+        sync: false
+      - key: INSTAGRAM_PASSWORD
+        sync: false
+      - key: INSTAGRAM_SESSION
+        sync: false
+      - key: INSTAGRAM_SESSION_ID
+        sync: false
+      - key: FACEBOOK_EMAIL
+        sync: false
+      - key: FACEBOOK_PASSWORD
+        sync: false
+      - key: FACEBOOK_SESSION
+        sync: false
+      - key: GMAIL_CLIENT_ID
+        sync: false
+      - key: GMAIL_CLIENT_SECRET
+        sync: false
+      - key: GMAIL_REFRESH_TOKEN
+        sync: false
+      - key: GMAIL_SENDER_EMAIL
+        sync: false
+      - key: CORS_ALLOW_ORIGINS
+        sync: false

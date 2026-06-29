@@ -1,0 +1,49 @@
+.git
+.gitignore
+.claude
+.codex
+
+# Secrets and credentials
+.env
+.env.*
+!**/.env.example
+credentials/
+client_secret_*.json
+gen-lang-client-*.json
+*.pem
+*.key
+
+# Local state
+*.db
+*.sqlite3
+*.log
+*.pid
+*.tmp
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Browser/session state
+ig_outreach/session_virel.json
+ig_outreach/INSTAGRAM_SESSION*.txt
+ig_outreach/screenshots/
+fb_outreach/session_fb.txt
+fb_outreach/FACEBOOK_SESSION*.txt
+fb_outreach/screenshots/
+fb_outreach/chrome_profile/
+
+# Frontend/node build output
+node_modules/
+dist/
+build/
+forge-os/
+forge-os-netlify-deploy/
+_netlify_frontend_deploy/
+
+# Generated UI exports and local artifacts
+stitch_forge_sales_command_dashboard/
+*.zip
+*.png
+*.mp4

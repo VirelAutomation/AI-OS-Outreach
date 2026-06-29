@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FORGE OS | Command Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Geist:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "surface": "#131313",
+                    "primary": "#ffb4aa",
+                    "secondary-container": "#454747",
+                    "primary-container": "#e3000f",
+                    "primary-fixed-dim": "#ffb4aa",
+                    "surface-variant": "#353534",
+                    "surface-dim": "#131313",
+                    "secondary": "#c6c6c7",
+                    "on-tertiary-container": "#f8f5f4",
+                    "inverse-on-surface": "#313030",
+                    "outline-variant": "#5e3f3a",
+                    "on-primary-fixed-variant": "#930006",
+                    "error-container": "#93000a",
+                    "on-primary-container": "#fff4f2",
+                    "tertiary-container": "#717070",
+                    "surface-container-highest": "#353534",
+                    "secondary-fixed": "#e2e2e2",
+                    "on-secondary-container": "#b4b5b5",
+                    "on-secondary": "#2f3131",
+                    "on-tertiary": "#303030",
+                    "on-tertiary-fixed": "#1b1c1c",
+                    "surface-container": "#201f1f",
+                    "on-surface-variant": "#e9bcb6",
+                    "error": "#ffb4ab",
+                    "inverse-surface": "#e5e2e1",
+                    "tertiary-fixed": "#e4e2e1",
+                    "tertiary": "#c8c6c5",
+                    "on-error": "#690005",
+                    "on-background": "#e5e2e1",
+                    "surface-container-low": "#1c1b1b",
+                    "on-surface": "#e5e2e1",
+                    "outline": "#af8782",
+                    "primary-fixed": "#ffdad5",
+                    "on-error-container": "#ffdad6",
+                    "inverse-primary": "#c0000b",
+                    "background": "#080808",
+                    "surface-tint": "#ffb4aa",
+                    "on-secondary-fixed-variant": "#454747",
+                    "on-primary": "#690003",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-bright": "#3a3939",
+                    "on-tertiary-fixed-variant": "#474746",
+                    "surface-container-high": "#2a2a2a",
+                    "on-primary-fixed": "#410001"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xl": "40px",
+                    "lg": "24px",
+                    "gutter": "20px",
+                    "xs": "4px",
+                    "base": "4px",
+                    "sm": "8px",
+                    "md": "16px",
+                    "margin": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Geist"],
+                    "headline-md": ["Geist"],
+                    "label-caps": ["JetBrains Mono"],
+                    "headline-lg": ["Geist"],
+                    "body-sm": ["Geist"],
+                    "data-mono": ["JetBrains Mono"],
+                    "headline-xl": ["Geist"],
+                    "headline-lg-mobile": ["Geist"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "data-mono": ["14px", {"lineHeight": "1.0", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @layer utilities {
+            .glass-card {
+                background: rgba(255, 255, 255, 0.03);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+            }
+            .glass-card:hover {
+                border-color: rgba(227, 0, 15, 0.3);
+                box-shadow: 0 0 15px rgba(227, 0, 15, 0.1);
+            }
+            .red-glow {
+                box-shadow: 0 0 15px rgba(227, 0, 15, 0.2);
+            }
+            .inner-glow-red {
+                box-shadow: inset 0 0 10px rgba(227, 0, 15, 0.1);
+            }
+            .scanline {
+                background: linear-gradient(to bottom, transparent 50%, rgba(227, 0, 15, 0.02) 50%);
+                background-size: 100% 4px;
+            }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-lg selection:bg-primary-container selection:text-white">
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 bg-surface-dim border-r border-outline-variant/20 flex flex-col py-lg px-md z-[60]">
+<div class="mb-xl px-sm">
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tighter text-primary">NEURAL SALES</h1>
+<p class="font-label-caps text-label-caps text-secondary opacity-60">AI COMMAND CENTER</p>
+</div>
+<nav class="flex-1 space-y-base">
+<a class="flex items-center gap-md px-md py-sm text-on-primary-container bg-primary-container/20 border-l-4 border-primary font-bold transition-transform duration-150 scale-[0.98]" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-caps text-label-caps">Intelligence</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-caps text-label-caps">Pipeline</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">rocket_launch</span>
+<span class="font-label-caps text-label-caps">Campaigns</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">group_add</span>
+<span class="font-label-caps text-label-caps">Lead Bank</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:bg-surface-container-highest hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</a>
+</nav>
+<button class="mt-xl mb-md w-full bg-primary-container py-sm font-label-caps text-label-caps text-white font-bold hover:brightness-110 transition-all active:scale-95">
+                New Deployment
+            </button>
+<div class="mt-auto space-y-base pt-md border-t border-outline-variant/10">
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary opacity-70 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span class="font-label-caps text-label-caps">Terminal</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 min-w-0 bg-background relative overflow-hidden">
+<div class="absolute inset-0 scanline pointer-events-none opacity-20"></div>
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 px-lg py-sm flex justify-between items-center max-w-[1600px] mx-auto w-full">
+<div class="flex items-center gap-xl">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps font-black text-primary">SALES COMMAND</span>
+<span class="font-data-mono text-[10px] text-secondary/50">OS_VERSION_4.2.1</span>
+</div>
+<div class="hidden md:flex gap-lg items-center">
+<span class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1">LIVE SESSION: 04:12:45</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">REVENUE: $1.2M</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex gap-sm mr-md border-r border-outline-variant/20 pr-md">
+<button class="p-xs hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-xs hover:text-primary transition-colors"><span class="material-symbols-outlined">history</span></button>
+</div>
+<div class="flex gap-sm">
+<button class="bg-surface-container border border-outline-variant/10 px-md py-xs font-label-caps text-label-caps hover:bg-surface-container-high transition-all active:scale-[0.99]">Log Call</button>
+<button class="bg-primary-container text-white px-md py-xs font-label-caps text-label-caps hover:brightness-110 transition-all active:scale-[0.99]">New Campaign</button>
+<button class="bg-primary-container text-white px-md py-xs font-label-caps text-label-caps hover:brightness-110 transition-all active:scale-[0.99]">Add Lead</button>
+</div>
+</div>
+</header>
+<div class="max-w-[1600px] mx-auto p-lg space-y-lg">
+<!-- Hero Banner & Day Indicator -->
+<div class="flex flex-col md:flex-row gap-lg items-stretch">
+<div class="glass-card flex-1 p-xl flex flex-col justify-center relative overflow-hidden group">
+<div class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-primary-container/10 to-transparent"></div>
+<div class="relative z-10">
+<span class="font-label-caps text-label-caps text-primary mb-sm block tracking-[0.3em]">SYSTEM UPTIME</span>
+<div class="flex items-baseline gap-md">
+<h2 class="font-headline-xl text-headline-xl text-white tracking-tighter">DAY 1</h2>
+<span class="font-data-mono text-secondary-fixed-dim bg-white/5 px-sm py-1 border border-white/10">00:00:00:01</span>
+</div>
+<p class="font-body-lg text-on-surface-variant max-w-xl mt-md">
+                                Operational synchronization complete. All neural nodes active. Commencing Day 1 deployment protocols for global outreach dominance.
+                            </p>
+</div>
+</div>
+<div class="glass-card w-full md:w-[400px] p-lg flex flex-col justify-between border-l-4 border-l-primary-container">
+<span class="font-label-caps text-label-caps text-secondary/60">DISTANCE TO $15M MRR</span>
+<div class="py-md">
+<div class="flex justify-between items-end mb-sm">
+<span class="font-headline-lg text-headline-lg text-white">$1.2M</span>
+<span class="font-data-mono text-primary">8.0%</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[8%] red-glow"></div>
+</div>
+</div>
+<div class="flex gap-sm">
+<div class="flex-1 bg-white/5 p-sm border border-white/5">
+<p class="text-[10px] font-label-caps text-secondary/50">CURRENT DATE</p>
+<p class="font-data-mono text-sm">OCT 24, 2024</p>
+</div>
+<div class="flex-1 bg-white/5 p-sm border border-white/5">
+<p class="text-[10px] font-label-caps text-secondary/50">SECTOR</p>
+<p class="font-data-mono text-sm">APAC / AMER</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Metric Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Row 1 -->
+<div class="glass-card p-lg relative group">
+<p class="font-label-caps text-label-caps text-secondary/60 mb-md">TOTAL ACTIVE LEADS</p>
+<div class="flex items-end justify-between">
+<h3 class="font-headline-lg text-headline-lg text-white">42,891</h3>
+<span class="text-primary flex items-center font-data-mono text-sm">+12% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+</div>
+<div class="mt-md h-1 bg-white/5 w-full"><div class="h-full bg-primary w-2/3"></div></div>
+</div>
+<div class="glass-card p-lg flex items-center justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-secondary/60 mb-sm">DAILY CALL PROGRESS</p>
+<h3 class="font-headline-md text-headline-md text-white">442 / 500</h3>
+<p class="font-data-mono text-xs text-primary mt-1">88% COMPLETE</p>
+</div>
+<div class="relative w-20 h-20">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="stroke-white/5" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="4"></path>
+<path class="stroke-primary-container" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="88, 100" stroke-linecap="round" stroke-width="4" style="filter: drop-shadow(0 0 4px #e3000f);"></path>
+</svg>
+</div>
+</div>
+<div class="glass-card p-lg flex items-center justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-secondary/60 mb-sm">DAILY EMAIL PROGRESS</p>
+<h3 class="font-headline-md text-headline-md text-white">1.2K / 2K</h3>
+<p class="font-data-mono text-xs text-primary mt-1">60% COMPLETE</p>
+</div>
+<div class="relative w-20 h-20">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="stroke-white/5" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="4"></path>
+<path class="stroke-primary-container" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="60, 100" stroke-linecap="round" stroke-width="4" style="filter: drop-shadow(0 0 4px #e3000f);"></path>
+</svg>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="glass-card p-lg">
+<p class="font-label-caps text-label-caps text-secondary/60 mb-md">APPOINTMENTS BOOKED</p>
+<div class="flex items-end justify-between">
+<h3 class="font-headline-lg text-headline-lg text-white">84</h3>
+<span class="font-data-mono text-sm bg-primary/10 text-primary px-sm py-1">+4 TODAY</span>
+</div>
+</div>
+<div class="glass-card p-lg">
+<p class="font-label-caps text-label-caps text-secondary/60 mb-md">REVENUE CLOSED</p>
+<div class="flex items-end justify-between">
+<h3 class="font-headline-lg text-headline-lg text-white">$412.5K</h3>
+<span class="font-data-mono text-sm text-primary">TARGET: $500K</span>
+</div>
+</div>
+<div class="glass-card p-lg">
+<p class="font-label-caps text-label-caps text-secondary/60 mb-md">CURRENT MRR</p>
+<div class="flex items-end justify-between">
+<h3 class="font-headline-lg text-headline-lg text-white">$1.2M</h3>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface bg-primary/20"></div>
+<div class="w-6 h-6 rounded-full border border-surface bg-primary/40"></div>
+<div class="w-6 h-6 rounded-full border border-surface bg-primary/60"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Outreach Volume Chart -->
+<div class="glass-card p-lg">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h4 class="font-headline-md text-headline-md text-white">30-Day Outreach Volume</h4>
+<p class="font-body-sm text-secondary/50">Cross-channel engagement saturation metrics</p>
+</div>
+<div class="flex gap-md">
+<div class="flex items-center gap-sm">
+<span class="w-3 h-3 bg-primary-container"></span>
+<span class="font-label-caps text-label-caps text-xs">Calls</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="w-3 h-3 bg-primary-container/40"></span>
+<span class="font-label-caps text-label-caps text-xs">Emails</span>
+</div>
+</div>
+</div>
+<div class="h-64 w-full relative flex items-end gap-1">
+<!-- Simulated Chart Bars with Red Gradient -->
+<div class="flex-1 bg-primary-container/20 h-[60%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+<div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 font-data-mono text-[10px] bg-surface p-1 border border-primary text-primary z-20">1.2k</div>
+</div>
+<div class="flex-1 bg-primary-container/20 h-[75%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+</div>
+<div class="flex-1 bg-primary-container/20 h-[55%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+</div>
+<div class="flex-1 bg-primary-container/20 h-[80%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+</div>
+<div class="flex-1 bg-primary-container/20 h-[90%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+</div>
+<div class="flex-1 bg-primary-container/20 h-[65%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+</div>
+<div class="flex-1 bg-primary-container/20 h-[40%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+</div>
+<div class="flex-1 bg-primary-container/20 h-[70%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+</div>
+<div class="flex-1 bg-primary-container/20 h-[85%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+</div>
+<div class="flex-1 bg-primary-container/20 h-[95%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+</div>
+<div class="flex-1 bg-primary-container/20 h-[60%] hover:bg-primary-container/40 transition-all cursor-pointer relative group">
+<div class="absolute bottom-0 w-full h-1 bg-primary-container shadow-[0_0_10px_#e3000f]"></div>
+</div>
+<!-- More bars would follow -->
+</div>
+</div>
+<!-- Conversion Funnel -->
+<div class="glass-card p-lg">
+<h4 class="font-headline-md text-headline-md text-white mb-xl">Conversion Funnel Integrity</h4>
+<div class="space-y-sm">
+<!-- Funnel Steps -->
+<div class="relative h-16 w-full flex items-center bg-primary-container/50 border-l-4 border-primary px-lg group overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container/20 to-transparent"></div>
+<div class="flex justify-between w-full relative z-10">
+<span class="font-label-caps text-label-caps font-bold">Leads Generated</span>
+<span class="font-data-mono">42,891</span>
+</div>
+</div>
+<div class="relative h-16 w-[85%] mx-auto flex items-center bg-primary-container/40 border-l-4 border-primary/80 px-lg group overflow-hidden">
+<div class="flex justify-between w-full relative z-10">
+<span class="font-label-caps text-label-caps">Contacted</span>
+<span class="font-data-mono">12,402 (28.9%)</span>
+</div>
+</div>
+<div class="relative h-16 w-[70%] mx-auto flex items-center bg-primary-container/30 border-l-4 border-primary/60 px-lg group overflow-hidden">
+<div class="flex justify-between w-full relative z-10">
+<span class="font-label-caps text-label-caps">Meetings</span>
+<span class="font-data-mono">1,842 (14.8%)</span>
+</div>
+</div>
+<div class="relative h-16 w-[55%] mx-auto flex items-center bg-primary-container/20 border-l-4 border-primary/40 px-lg group overflow-hidden">
+<div class="flex justify-between w-full relative z-10">
+<span class="font-label-caps text-label-caps">Proposals</span>
+<span class="font-data-mono">412 (22.3%)</span>
+</div>
+</div>
+<div class="relative h-16 w-[40%] mx-auto flex items-center bg-primary-container/10 border-l-4 border-primary/20 px-lg group overflow-hidden">
+<div class="flex justify-between w-full relative z-10">
+<span class="font-label-caps text-label-caps font-black text-primary">Closed</span>
+<span class="font-data-mono text-primary font-bold">84 (20.3%)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Atmosphere: Random Terminal Glitches -->
+<div class="fixed inset-0 pointer-events-none z-[100] opacity-0 transition-opacity duration-300" id="glitch-overlay">
+<div class="absolute top-1/4 left-0 w-full h-[1px] bg-primary/20 shadow-[0_0_10px_#e3000f]"></div>
+<div class="absolute top-3/4 left-0 w-full h-[1px] bg-primary/20 shadow-[0_0_10px_#e3000f]"></div>
+</div>
+</main>
+</div>
+<script>
+        // Micro-interaction: Random glitch effect for war-room aesthetic
+        function triggerGlitch() {
+            const overlay = document.getElementById('glitch-overlay');
+            if (Math.random() > 0.95) {
+                overlay.style.opacity = '1';
+                setTimeout(() => {
+                    overlay.style.opacity = '0';
+                }, 100);
+            }
+        }
+        setInterval(triggerGlitch, 2000);
+
+        // Counter simulation for MRR
+        let mrr = 1200000;
+        const mrrDisplay = document.querySelector('h3.font-headline-lg.text-headline-lg.text-white:last-of-type');
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                mrr += Math.floor(Math.random() * 100);
+                if(mrrDisplay) mrrDisplay.innerText = `$${(mrr / 1000000).toFixed(2)}M`;
+            }
+        }, 3000);
+    </script>
+</body></html>
