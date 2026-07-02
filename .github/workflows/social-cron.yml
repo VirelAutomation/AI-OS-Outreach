@@ -17,6 +17,8 @@ jobs:
       PYTHONUNBUFFERED: "1"
       DATA_DIR: ${{ github.workspace }}/.runtime/github-social
       IG_HEADLESS: "1"
+      RUN_EMAIL_CAMPAIGNS: "0"
+      RUN_SUPABASE_SYNC: "0"
       INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
       INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
       INSTAGRAM_SESSION_ID: ${{ secrets.INSTAGRAM_SESSION_ID }}
@@ -26,12 +28,6 @@ jobs:
       FACEBOOK_SESSION: ${{ secrets.FACEBOOK_SESSION }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_API_KEY_JARVIS: ${{ secrets.GEMINI_API_KEY_JARVIS }}
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-      GMAIL_CLIENT_ID: ${{ secrets.GMAIL_CLIENT_ID }}
-      GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_CLIENT_SECRET }}
-      GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
-      GMAIL_SENDER_EMAIL: ${{ secrets.GMAIL_SENDER_EMAIL }}
 
     steps:
       - name: Check out repository

@@ -52,6 +52,8 @@ _EMAIL_CAMPAIGNS = {
 }
 _MISS_GRACE_HOURS = 2
 _EMAIL_GRACE_MINUTES = 45
+_RUN_EMAIL_CAMPAIGNS = os.getenv("RUN_EMAIL_CAMPAIGNS", "1").strip().lower() not in {"0", "false", "no", "off"}
+_RUN_SUPABASE_SYNC = os.getenv("RUN_SUPABASE_SYNC", "1").strip().lower() not in {"0", "false", "no", "off"}
 
 
 def _now_ist() -> datetime:
@@ -332,7 +334,7 @@ def run_tick(execute: bool = True) -> dict:
     if execute and followups_due:
         _run_followups(day, now.hour, 30 if now.minute >= 30 else 0, platform_blocks, partial_failures)
 
-    if execute:
+    if execute and _RUN_EMAIL_CAMPAIGNS:
         email_campaigns_ran = _run_email_campaigns(day, now, extra_events)
 
     crl_report = _run_crl(day, tick_bucket) if execute else build_learning_report(export=False)
@@ -363,11 +365,22 @@ def run_tick(execute: bool = True) -> dict:
     if not execute:
         return summary
 
-    sync_report = sync_runtime_state(
-        data_dir=_DATA_DIR,
-        tick_summary=summary,
-        extra_events=extra_events + _failure_events(partial_failures),
-    )
+    if _RUN_SUPABASE_SYNC:
+        sync_report = sync_runtime_state(
+            data_dir=_DATA_DIR,
+            tick_summary=summary,
+            extra_events=extra_events + _failure_events(partial_failures),
+        )
+    else:
+        sync_report = {
+            "ok": True,
+            "skipped": True,
+            "source": "github-cron-local-only",
+            "activity_count": 0,
+            "mirrored_events": 0,
+            "snapshot_created": False,
+            "sync_error": None,
+        }
     summary["social_sync"] = sync_report
     day["sync_runs"][tick_bucket] = sync_report
 
