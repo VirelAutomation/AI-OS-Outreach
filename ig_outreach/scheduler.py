@@ -136,6 +136,13 @@ def _fb(*args, job=""):
     return _run(_FB, list(args), job, platform="facebook")
 
 
+def _ig_market_region(region: str) -> str:
+    """Map scheduler market labels onto the IG engine's supported region set."""
+    if region in {"uk", "australia"}:
+        return "us"
+    return region
+
+
 def _heartbeat():
     log.info(f"[HEARTBEAT] Alive - {datetime.now(_IST).strftime('%H:%M IST')}")
 
@@ -172,7 +179,16 @@ def _parallel(*callables):
 
 
 def _ig_comments(niche: str, region: str, label: str, limit: str = _COMMENT):
-    return _ig("--comments", "--niche", niche, "--region", region, "--comment-limit", limit, job=f"IG comments {label}")
+    return _ig(
+        "--comments",
+        "--niche",
+        niche,
+        "--region",
+        _ig_market_region(region),
+        "--comment-limit",
+        limit,
+        job=f"IG comments {label}",
+    )
 
 
 def _fb_comments(niche: str, region: str, label: str):
@@ -212,9 +228,10 @@ def _slot_1000():
 
 def _slot_1400():
     results = []
-    results.append(_ig("--region", "uk", "--niche", "hvac", "--limit", "4", job="UK HVAC DMs"))
-    results.append(_ig("--region", "uk", "--niche", "med_spa", "--limit", "3", job="UK MedSpa DMs"))
-    results.append(_ig("--region", "uk", "--niche", "coach", "--limit", "3", job="UK Coach DMs"))
+    ig_region = _ig_market_region("uk")
+    results.append(_ig("--region", ig_region, "--niche", "hvac", "--limit", "4", job="UK HVAC DMs"))
+    results.append(_ig("--region", ig_region, "--niche", "med_spa", "--limit", "3", job="UK MedSpa DMs"))
+    results.append(_ig("--region", ig_region, "--niche", "coach", "--limit", "3", job="UK Coach DMs"))
     results.extend(_parallel(
         lambda: _fb("--dms", "--region", "uk", "--limit", "5", job="UK FB DMs"),
         lambda: _ig_comments("hvac", "uk", "UK HVAC 2pm"),

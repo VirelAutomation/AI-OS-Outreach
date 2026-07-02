@@ -84,7 +84,6 @@ def login(cl: Client) -> Client:
     if encoded:
         try:
             cl.set_settings(json.loads(base64.b64decode(encoded).decode()))
-            cl.login(username, password)
             if _verify_v1(cl):
                 log.info(f"[IG] Railway session OK — @{username}")
                 return cl
@@ -159,6 +158,119 @@ def login(cl: Client) -> Client:
         except ImportError:
             raise RuntimeError(
                 "[IG] ig_session_refresh.py not found — and API login is blocked.\n"
+                "Run: python ig_outreach/ig_session_refresh.py"
+            )
+
+    _save_session(cl)
+    log.info(f"[IG] Logged in as @{username}")
+    return cl
+
+
+def login(cl: Client) -> Client:
+    _ensure_runtime_dir()
+    username = os.getenv("INSTAGRAM_USERNAME")
+    password = os.getenv("INSTAGRAM_PASSWORD")
+    if not username or not password:
+        raise ValueError("INSTAGRAM_USERNAME / INSTAGRAM_PASSWORD missing")
+
+    session_id = os.getenv("INSTAGRAM_SESSION_ID", "")
+    if session_id:
+        try:
+            cl2 = build_client()
+            cl2.login_by_sessionid(session_id)
+            if _verify_v1(cl2):
+                log.info(f"[IG] Web session ID OK - @{username}")
+                _save_session(cl2)
+                return cl2
+            log.warning("[IG] Session ID verify failed - trying other methods")
+        except Exception as exc:
+            log.warning(f"[IG] Session ID login failed: {exc}")
+
+    encoded = os.getenv("INSTAGRAM_SESSION", "")
+    if encoded:
+        try:
+            cl.set_settings(json.loads(base64.b64decode(encoded).decode()))
+            if _verify_v1(cl):
+                log.info(f"[IG] Railway session restored - @{username}")
+                _save_session(cl)
+                return cl
+            log.warning("[IG] Railway session loaded but verify failed - trying credential login")
+            cl.login(username, password)
+            if _verify_v1(cl):
+                log.info(f"[IG] Railway session refreshed with credentials - @{username}")
+                _save_session(cl)
+                return cl
+        except Exception as exc:
+            log.warning(f"[IG] Railway session invalid: {exc}")
+
+    if SESSION_FILE.exists():
+        try:
+            cl.load_settings(SESSION_FILE)
+            if _verify_v1(cl):
+                log.info(f"[IG] Session restored - @{username}")
+                _save_session(cl)
+                return cl
+            log.warning("[IG] Session file loaded but verify failed - trying credential login")
+            cl.login(username, password)
+            if _verify_v1(cl):
+                log.info(f"[IG] Session refreshed with credentials - @{username}")
+                _save_session(cl)
+                return cl
+            log.warning("[IG] Session file refresh with credentials failed - fresh login next")
+        except (ChallengeRequired, JSONDecodeError):
+            log.warning("[IG] Session file triggered challenge - clearing and trying fresh login")
+        except Exception as exc:
+            log.warning(f"[IG] Session file invalid: {exc}")
+        SESSION_FILE.unlink(missing_ok=True)
+
+    log.info(f"[IG] Fresh login as @{username}...")
+    cl = build_client()
+    need_browser_refresh = False
+    try:
+        cl.login(username, password)
+    except ChallengeRequired:
+        log.warning("[IG] ChallengeRequired on API login - falling back to headless Chrome")
+        need_browser_refresh = True
+    except TwoFactorRequired:
+        log.warning("[IG] 2FA required on API login - falling back to headless Chrome")
+        need_browser_refresh = True
+    except BadPassword:
+        raise ValueError("[IG] Wrong password - check INSTAGRAM_PASSWORD env var")
+    except (JSONDecodeError, Exception) as exc:
+        if "Expecting value" in str(exc) or isinstance(exc, JSONDecodeError):
+            log.warning("[IG] Challenge returned empty page - falling back to headless Chrome")
+            need_browser_refresh = True
+        else:
+            raise
+
+    if not need_browser_refresh and not _verify_v1(cl):
+        log.warning("[IG] API login verify failed - falling back to headless Chrome")
+        need_browser_refresh = True
+
+    if need_browser_refresh:
+        log.info("[IG] API login blocked - trying web login then headless Chrome...")
+        try:
+            from ig_session_refresh import refresh_and_save
+
+            sid = refresh_and_save(
+                username,
+                password,
+                session_file=SESSION_FILE,
+                sessionid_file=SESSION_ID_FILE,
+            )
+            if sid and SESSION_FILE.exists():
+                cl2 = build_client()
+                cl2.load_settings(SESSION_FILE)
+                log.info(f"[IG] Web/Chrome session loaded - @{username}")
+                return cl2
+            raise RuntimeError(
+                "[IG] All login methods failed (API + web + Chrome).\n"
+                "Check ig_outreach/screenshots/ig_*.png for what the browser saw.\n"
+                "Most likely: wrong password, 2FA enabled, or Instagram hard-blocked the account."
+            )
+        except ImportError:
+            raise RuntimeError(
+                "[IG] ig_session_refresh.py not found - and API login is blocked.\n"
                 "Run: python ig_outreach/ig_session_refresh.py"
             )
 
