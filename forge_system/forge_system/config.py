@@ -4,8 +4,8 @@ config.py - single source of truth for backend configuration.
 Canonical behavior:
 - Read `.env` from the project root first.
 - Fall back to local package `.env` only for convenience.
-- Fail fast when core infrastructure secrets are missing.
 - Keep optional integrations disabled unless explicitly configured.
+- Fail fast only on invalid guardrail values, not on missing optional service keys.
 """
 
 from functools import lru_cache
@@ -31,11 +31,11 @@ class Settings(BaseSettings):
         env_ignore_empty=True,
     )
 
-    supabase_url: str
-    supabase_anon_key: str
-    supabase_service_key: str
-    database_url: str
-    redis_url: str
+    supabase_url: str = ''
+    supabase_anon_key: str = ''
+    supabase_service_key: str = ''
+    database_url: str = ''
+    redis_url: str = ''
     redis_password: str = ''
 
     company_name: str = 'Virel Automation'
@@ -113,8 +113,6 @@ class Settings(BaseSettings):
             raise ValueError('REVENUE_TARGET_MRR must be greater than 0.')
         if self.revenue_target_months <= 0:
             raise ValueError('REVENUE_TARGET_MONTHS must be greater than 0.')
-        if not self.any_gemini_key_configured():
-            raise ValueError('At least one Gemini API key must be configured.')
         return self
 
     def any_gemini_key_configured(self) -> bool:
