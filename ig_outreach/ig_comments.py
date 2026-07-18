@@ -131,9 +131,8 @@ ALL_TEMPLATES = (
 def _generate_comment(caption: str, username: str) -> str:
     """
     Generate a relevant comment for a post.
-    Uses Claude if ANTHROPIC_API_KEY is set, otherwise picks the best template.
+    Uses Gemini if available, otherwise picks the best template.
     """
-    # Try Gemini first
     api_key = os.getenv("GEMINI_API_KEY_NOAH") or os.getenv("GEMINI_API_KEY", "")
     if api_key and caption and len(caption) > 30:
         try:
