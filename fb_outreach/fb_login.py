@@ -47,6 +47,10 @@ _HOME_SELECTORS = [
 ]
 
 
+SESSION_FILE = _RUNTIME_DIR / "session_fb.txt"
+SESSION_EXPORT_FILE = _RUNTIME_DIR / "FACEBOOK_SESSION.txt"
+
+
 def _find(driver, selectors, timeout=15, label="element"):
     for by, sel in selectors:
         try:
@@ -98,10 +102,6 @@ def _save_session(driver):
         return None
 
 
-SESSION_FILE = _RUNTIME_DIR / "session_fb.txt"
-SESSION_EXPORT_FILE = _RUNTIME_DIR / "FACEBOOK_SESSION.txt"
-
-
 def _load_session(driver) -> bool:
     """Try loading session from FACEBOOK_SESSION env var or local file."""
     _RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
@@ -142,6 +142,7 @@ def login(driver) -> bool:
     # 1. Try cookie session first (works on Railway — no browser login needed)
     if _load_session(driver) and is_logged_in(driver):
         log.info(f"[FB] Session restored from cookies — {phone}")
+        _save_session(driver)
         return True
 
     if is_logged_in(driver):
@@ -275,6 +276,7 @@ def _wait_for_manual_login(driver, seconds=180) -> bool:
     for i in range(0, seconds, 5):
         time.sleep(5)
         if is_logged_in(driver):
+            _save_session(driver)
             log.info("[FB] Manual login confirmed! Session saved — won't need this again.")
             return True
         remaining = seconds - i - 5
